@@ -10,7 +10,7 @@ const withPWA = nextPWA({
 
 const nextConfig = {
   images: {
-    domains: ["localhost"],
+    domains: ["localhost", "192.168.20.197", "192.168.20.196"],
     remotePatterns: [
       {
         protocol: "https",
