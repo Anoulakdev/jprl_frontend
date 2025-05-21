@@ -41,10 +41,9 @@ const DropdownUser = () => {
       >
         <span className="h-12 w-12 rounded-full">
           {user?.userimg ? (
-            <Image
-              width={100}
-              height={50}
-              src={`${process.env.NEXT_PUBLIC_API_URL}/upload/user/${user?.userimg}`}
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={`${process.env.NEXT_PUBLIC_API_URL}/upload/user/${user.userimg}`}
               alt="User"
               className="rounded-full"
               style={{
