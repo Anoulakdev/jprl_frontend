@@ -51,12 +51,12 @@ const ChangePassword = () => {
           toast.error("ລະ​ຫັດ​ເກ​ົ່າ​ບໍ່​ຕົງ​ກັບ​ຖານ​ຂໍ້​ມູນ");
         } else {
           // Handle other errors
-          toast.error("ເພີ່ມ​ຂໍ້​ມູນ​ບໍ່ສຳ​ເລັ​ດ");
+          toast.error("ປ່ຽນ​ລະ​ຫັດບໍ່ສຳ​ເລັ​ດ");
         }
       } else {
         // Handle non-Axios errors
         console.error("Error submitting form:", error);
-        toast.error("ເພີ່ມ​ຂໍ້​ມູນ​ບໍ່ສຳ​ເລັ​ດ");
+        toast.error("ປ່ຽນ​ລະ​ຫັດບໍ່ສຳ​ເລັ​ດ");
       }
     } finally {
       setIsSubmitting(false);
@@ -121,7 +121,7 @@ const ChangePassword = () => {
               type="submit"
               className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90 xl:w-1/2"
             >
-              {isSubmitting ? "ກຳລັງບັນທຶກ..." : "ເພີ່ມຂໍ້​ມູນ"}
+              {isSubmitting ? "ກຳລັງບັນທຶກ..." : "ປ່ຽນ​ລະ​ຫັດ"}
             </button>
           </div>
         </div>
