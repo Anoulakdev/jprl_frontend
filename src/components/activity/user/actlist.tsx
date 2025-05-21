@@ -1,0 +1,90 @@
+"use client";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import axiosInstance from "@/utils/axiosInstance";
+import { toast } from "react-toastify";
+import moment from "moment";
+
+interface Activity {
+  id: number;
+  name: string;
+  dateactive: string;
+}
+
+const ActList: React.FC = () => {
+  const [data, setData] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await axiosInstance.get(
+          `/activitys`
+        );
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast.error("Failed to load activity data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleAdd = (id: number) => {
+    // router.push(`/activity/user/detail/add/${id}`);
+    window.location.href = `/activity/user/detail/add/${id}`;
+  };
+
+  const today = moment().format("YYYY-MM-DD");
+
+  return (
+    <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
+      {loading ? (
+        <div className="flex h-48 items-center justify-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+        </div>
+      ) : (
+        <div className="grid gap-5">
+          {data.filter((act) => act.dateactive && moment(act.dateactive).isSame(today, "day")).length > 0 ? (
+            data
+              .filter((act) => act.dateactive && moment(act.dateactive).isSame(today, "day"))
+              .map((act) => (
+                <div
+                  key={act.id}
+                  className="max-w-full rounded-lg border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800"
+                >
+                  <div className="p-5">
+                    <h5 className="mb-3 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                      ຫົວ​ຂ​ໍ້​ກິດ​ຈ​ະ​ກຳ
+                    </h5>
+                    <p className="mb-6 text-xl font-normal text-gray-700 dark:text-gray-400">
+                      {act.name}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <button
+                        onClick={() => handleAdd(act.id)}
+                        className="text-md rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      >
+                        ເພີ່ມ​ກິດ​ຈ​ະ​ກຳ
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+          ) : (
+            <div className="py-15 text-center text-2xl font-bold text-red-600">
+              ຍັງ​ບໍ່​ທັນ​ມີ​ກິດ​ຈະ​ກຳ​ໃນ​ມື້​ນີ້
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ActList;
