@@ -10,18 +10,18 @@ const withPWA = nextPWA({
 
 const nextConfig = {
   images: {
-    domains: [
-      "localhost",
-      "192.168.20.197",
-      "192.168.20.196",
-      "jprl.edl.com.la",
-    ],
+    domains: ["localhost", "192.168.20.197", "192.168.20.196"],
     remotePatterns: [
-      // {
-      //   protocol: "https",
-      //   hostname: "jprl.edl.com.la",
-      //   port: "",
-      // },
+      {
+        protocol: "https",
+        hostname: "jprl.edl.com.la",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "jprl-api.edl.com.la",
+        port: "",
+      },
       {
         protocol: "https",
         hostname: "cdn.sanity.io",
