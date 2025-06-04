@@ -143,7 +143,6 @@ const OrganizeList: React.FC = () => {
 
       setData(response.data);
       toast.success("ອັບ​ເດດ​ສຳ​ເລັດ");
-      router.push("/organize/organize");
       setShowEditModal(false);
       setSelectedFile(null);
       setPreviewUrl(null);
