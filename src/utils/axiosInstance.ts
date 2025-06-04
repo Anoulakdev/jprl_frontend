@@ -4,7 +4,7 @@ import { getLocalStorage, removeLocalStorage } from "@/utils/storage";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // กำหนด URL หลัก
-  timeout: 5000, // Timeout (ms)
+  timeout: 60000, // Timeout (ms)
   headers: {
     "Content-Type": "application/json", // Header เริ่มต้น
   },

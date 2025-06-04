@@ -28,6 +28,7 @@ interface User {
 const OrganizeList: React.FC = () => {
   const [data, setData] = useState<Organize | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -84,6 +85,8 @@ const OrganizeList: React.FC = () => {
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
       const formData = new FormData();
       formData.append("organizeimg", selectedFile);
@@ -116,6 +119,8 @@ const OrganizeList: React.FC = () => {
       toast.warning("Please select an image file");
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       const formData = new FormData();
@@ -262,9 +267,10 @@ const OrganizeList: React.FC = () => {
               </button>
               <button
                 onClick={handleAddSubmit}
+                disabled={isSubmitting}
                 className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-blue-700"
               >
-                ບັນທຶກ
+                {isSubmitting ? "ກຳລັງບັນທຶກ..." : "ບັນທຶກ"}
               </button>
             </div>
           </div>
@@ -339,9 +345,10 @@ const OrganizeList: React.FC = () => {
               </button>
               <button
                 onClick={handleEditSubmit}
+                disabled={isSubmitting}
                 className="rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-orange-700"
               >
-                ອັບເດດ
+                {isSubmitting ? "ກຳລັງອັບເດດ..." : "ອັບເດດ"}
               </button>
             </div>
           </div>
