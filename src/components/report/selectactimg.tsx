@@ -55,7 +55,7 @@ const Report: React.FC = () => {
   useEffect(() => {
     const fetchActs = async () => {
       try {
-        const response = await axiosInstance.get(`/activitys`);
+        const response = await axiosInstance.get(`/activitys/sactivity`);
         setActs(response.data);
       } catch (error) {
         console.error("Error fetching activities:", error);

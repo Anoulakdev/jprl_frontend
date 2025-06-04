@@ -77,9 +77,7 @@ const EditForm = () => {
   useEffect(() => {
     const fetchPositions = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/positions`,
-        );
+        const response = await axiosInstance.get(`/positions/sposition`);
         setPositionss(response.data);
       } catch (error) {
         console.error("Error fetching positions:", error);
@@ -93,9 +91,7 @@ const EditForm = () => {
   useEffect(() => {
     const fetchUnits = async () => {
       try {
-        const response = await axiosInstance.get(
-          `/units`,
-        );
+        const response = await axiosInstance.get(`/units/sunit`);
         setUnitss(response.data);
       } catch (error) {
         console.error("Error fetching units:", error);
@@ -107,10 +103,14 @@ const EditForm = () => {
   }, []);
 
   useEffect(() => {
+    if (!user?.unitId) {
+      setChuss([]);
+      return;
+    }
     const fetchChus = async () => {
       try {
         const response = await axiosInstance.get(
-          `/chus`,
+          `/chus/schu?unitId=${user.unitId}`,
         );
         setChuss(response.data);
       } catch (error) {
@@ -118,15 +118,23 @@ const EditForm = () => {
         toast.error("Failed to load chus");
       }
     };
-
     fetchChus();
-  }, []);
+  }, [user?.unitId]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    if (user) {
+
+    // เมื่อเปลี่ยน unitId ต้องเคลียร์ chuId ด้วย และรีเฟรช chuss (useEffect จะทำงาน)
+    if (name === "unitId") {
+      setUser((prev) =>
+        prev
+          ? { ...prev, [name]: Number(value), chuId: 0 } // reset chuId
+          : null,
+      );
+      setChuss([]); // เคลียร์ chuss ชั่วคราวระหว่างโหลด
+    } else if (user) {
       setUser({ ...user, [name]: value });
     }
   };
@@ -145,20 +153,25 @@ const EditForm = () => {
 
     try {
       setIsLoading(true);
-      const updatedUser = {
-        ...user,
-        userimg: uploadedImage || user.userimg, // Set the uploaded image name
-      };
+      const formData = new FormData();
+      formData.append("firstname", user.firstname);
+      formData.append("lastname", user.lastname);
+      formData.append("gender", user.gender);
+      formData.append("tel", user.tel || "");
+      formData.append("roleId", String(user.roleId));
+      formData.append("positionId", String(user.positionId));
+      formData.append("unitId", String(user.unitId));
+      formData.append("chuId", String(user.chuId));
 
-      await axiosInstance.put(
-        `/users/${user.id}`,
-        updatedUser,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      if (uploadedImage) {
+        formData.append("userimg", uploadedImage);
+      }
+
+      await axiosInstance.put(`/users/${user.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      );
+      });
 
       toast.success("ອັບ​ເດດ​ສຳ​ເລັດ​ແລ​້ວ");
       router.push("/user/admin");
@@ -262,7 +275,7 @@ const EditForm = () => {
                   name="positionId"
                   value={user?.positionId || ""}
                   onChange={handleChange}
-                  className="relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary text-black"
+                  className="relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 text-black outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary"
                   required
                 >
                   <option value="" disabled>
@@ -301,7 +314,7 @@ const EditForm = () => {
                   name="unitId"
                   value={user?.unitId || ""}
                   onChange={handleChange}
-                  className="relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary text-black"
+                  className="relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 text-black outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary"
                   required
                 >
                   <option value="" disabled>
@@ -340,7 +353,7 @@ const EditForm = () => {
                   name="chuId"
                   value={user?.chuId || ""}
                   onChange={handleChange}
-                  className="relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary text-black"
+                  className="relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 text-black outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary"
                   required
                 >
                   <option value="" disabled>
@@ -378,7 +391,7 @@ const EditForm = () => {
                 accept="image/*"
                 name="userimg"
                 onChange={handleFileChange}
-                className="w-full cursor-pointer rounded-[7px] border-[1.5px] border-stroke px-3 py-[9px] outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-stroke file:px-2.5 file:py-1 file:text-body-xs file:font-medium file:text-dark-5 focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-dark dark:border-dark-3 dark:bg-dark-2 dark:file:border-dark-3 dark:file:bg-white/30 dark:file:text-white text-black"
+                className="w-full cursor-pointer rounded-[7px] border-[1.5px] border-stroke px-3 py-[9px] text-black outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-stroke file:px-2.5 file:py-1 file:text-body-xs file:font-medium file:text-dark-5 focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-dark dark:border-dark-3 dark:bg-dark-2 dark:file:border-dark-3 dark:file:bg-white/30 dark:file:text-white"
               />
             </div>
           </div>
@@ -400,7 +413,9 @@ const EditForm = () => {
           <div className="mt-6 flex justify-center">
             <button
               type="submit"
-              className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90 md:w-1/2 xl:w-1/2"
+              className={`flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white transition hover:bg-opacity-90 md:w-1/2 xl:w-1/2 ${
+                isLoading ? "cursor-not-allowed opacity-50" : ""
+              }`}
               disabled={isLoading} // Disable button when loading
             >
               {isLoading ? "ກຳລັງອັບເດດ..." : "ອັບ​ເດດ"}

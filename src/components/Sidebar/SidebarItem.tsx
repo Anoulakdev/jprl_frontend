@@ -1,21 +1,27 @@
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import SidebarDropdown from "@/components/Sidebar/SidebarDropdown";
 
-const SidebarItem = ({ item, pageName, setPageName }: any) => {
-  const handleClick = () => {
-    const updatedPageName =
-      pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : "";
-    return setPageName(updatedPageName);
-  };
+const SidebarItem = ({ item }: any) => {
+  const pathname = usePathname();
+
+  // ตรวจสอบว่าเมนูนี้ active หรือไม่
+  const isActive =
+    pathname === item.route ||
+    (item.children &&
+      item.children.some((child: any) => pathname === child.route));
 
   return (
     <>
       <li>
         <Link
           href={item.route}
-          onClick={handleClick}
-          className={`${pageName === item.label.toLowerCase() ? "bg-primary/[.07] text-primary dark:bg-white/10 dark:text-white" : "text-dark-4 hover:bg-gray-2 hover:text-dark dark:text-gray-5 dark:hover:bg-white/10 dark:hover:text-white"} group relative flex items-center gap-3 rounded-[7px] px-3.5 py-3 font-medium duration-300 ease-in-out`}
+          className={`${
+            isActive
+              ? "bg-primary/[.07] text-primary dark:bg-white/10 dark:text-white"
+              : "text-dark-4 hover:bg-gray-2 hover:text-dark dark:text-gray-5 dark:hover:bg-white/10 dark:hover:text-white"
+          } group relative flex items-center gap-3 rounded-[7px] px-3.5 py-3 font-medium duration-300 ease-in-out`}
         >
           {item.icon}
           {item.label}
@@ -32,7 +38,7 @@ const SidebarItem = ({ item, pageName, setPageName }: any) => {
           {item.children && (
             <svg
               className={`absolute right-3.5 top-1/2 -translate-y-1/2 fill-current ${
-                pageName !== item.label.toLowerCase() && "rotate-180"
+                !isActive && "rotate-180"
               }`}
               width="22"
               height="22"
@@ -53,10 +59,10 @@ const SidebarItem = ({ item, pageName, setPageName }: any) => {
         {item.children && (
           <div
             className={`translate transform overflow-hidden ${
-              pageName !== item.label.toLowerCase() && "hidden"
+              !isActive && "hidden"
             }`}
           >
-            <SidebarDropdown item={item.children} />
+            <SidebarDropdown items={item.children} />
           </div>
         )}
       </li>

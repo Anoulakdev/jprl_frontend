@@ -7,16 +7,18 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
 
-interface Activity {
+interface Notice {
   id: number;
-  name: string;
-  dateactive: string;
+  title: string;
+  date: string;
+  noticefile: string;
 }
 
 const EditForm: React.FC = () => {
   const router = useRouter();
   const { id } = useParams();
-  const [act, setAct] = useState<Activity | null>(null);
+  const [notice, setNotice] = useState<Notice | null>(null);
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
 
   useEffect(() => {
@@ -24,14 +26,15 @@ const EditForm: React.FC = () => {
 
     setIsLoading(true); // Set loading to true before fetching
     axiosInstance
-      .get<Activity>(`/activitys/${id}`)
+      .get<Notice>(`/notices/${id}`)
       .then((response) => {
         console.log("API Response:", response.data);
-        const activity = response.data;
-        setAct({
-          id: activity.id,
-          name: activity.name,
-          dateactive: moment(activity.dateactive).format("DD/MM/YYYY"),
+        const notice = response.data;
+        setNotice({
+          id: notice.id,
+          date: moment(notice.date).format("DD/MM/YYYY"),
+          title: notice.title,
+          noticefile: notice.noticefile,
         });
       })
       .catch((error) => {
@@ -47,11 +50,18 @@ const EditForm: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    setAct((prevAct) => ({ ...prevAct!, [name]: value }));
+    setNotice((prevAct) => ({ ...prevAct!, [name]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploadedImage(file); // Set the actual file
+    }
   };
 
   useEffect(() => {
-    if (!act) return;
+    if (!notice) return;
 
     flatpickr(".form-datepicker", {
       mode: "single",
@@ -62,35 +72,41 @@ const EditForm: React.FC = () => {
         '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
       nextArrow:
         '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-      defaultDate: act.dateactive, // Set the initial value for flatpickr
+      defaultDate: notice.date, // Set the initial value for flatpickr
       onChange: (selectedDates, dateStr) => {
-        setAct((prevAct) =>
-          prevAct ? { ...prevAct, dateactive: dateStr } : null,
+        setNotice((prevAct) =>
+          prevAct ? { ...prevAct, date: dateStr } : null,
         );
       },
     });
-  }, [act]);
+  }, [notice]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!act) return;
+    if (!notice) return;
 
     setIsLoading(true); // Set loading during submission
     try {
-      // Convert dateactive to yyyy-mm-dd format using Moment.js
-      const formattedDate = moment(act.dateactive, "DD/MM/YYYY").format(
-        "YYYY-MM-DD",
+      const formData = new FormData();
+      formData.append(
+        "date",
+        moment(notice.date, "DD/MM/YYYY").format("YYYY-MM-DD"),
       );
+      formData.append("title", notice.title);
 
-      // Update formData with formatted date
-      const updatedFormData = {
-        ...act,
-        dateactive: formattedDate,
-      };
-      await axiosInstance.put(`/activitys/${act.id}`, updatedFormData);
+      if (uploadedImage) {
+        formData.append("noticefile", uploadedImage);
+      }
+
+      await axiosInstance.put(`/notices/${notice.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       toast.success("ອັບ​ເດດ​ສຳ​ເລັດ​ແລ​້ວ");
-      router.push("/activity/admin");
+      router.push("/notice");
     } catch (error) {
       console.error("Error during form submission:", error);
       toast.error("ອັບ​ເດດ​ບໍ່​ສຳ​ເລັດ");
@@ -108,31 +124,14 @@ const EditForm: React.FC = () => {
           ) : (
             <>
               <div className="mb-4.5 flex flex-col gap-4.5 xl:flex-row">
-                {/* Name Field */}
-                <div className="w-full xl:w-1/2">
-                  <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
-                    ຫົວ​ຂໍ້​ກິດ​ຈະ​ກຳ <span className="text-red">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={act?.name || ""}
-                    onChange={handleChange}
-                    placeholder="ຫົວ​ຂໍ້​ກິດ​ຈະ​ກຳ"
-                    className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-                    required
-                  />
-                </div>
-
-                {/* Description Field */}
-                <div className="w-full xl:w-1/2">
+                <div className="w-full xl:w-1/3">
                   <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
-                    ມື້​ເລີ່ມ​ກິດ​ຈະ​ກຳ <span className="text-red">*</span>
+                    ວັນ​ທີ <span className="text-red">*</span>
                   </label>
                   <div className="relative">
                     <input
-                      name="dateactive"
-                      value={act?.dateactive || ""}
+                      name="date"
+                      value={notice?.date || ""}
                       onChange={handleChange}
                       className="form-datepicker w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary"
                       placeholder="dd/mm/yyyy"
@@ -146,6 +145,32 @@ const EditForm: React.FC = () => {
                       <ArrowDownCircleIcon className="mt-3 h-6 w-6 md:mt-3 lg:mt-1" />
                     </div>
                   </div>
+                </div>
+                <div className="w-full xl:w-1/3">
+                  <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
+                    ຫົວ​ຂໍ້​ແຈ້ງ​ການ <span className="text-red">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={notice?.title || ""}
+                    onChange={handleChange}
+                    placeholder="ຫົວ​ຂໍ້​ແຈ້ງ​ການ"
+                    className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+                    required
+                  />
+                </div>
+                <div className="w-full xl:w-1/3">
+                  <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
+                    ເອ​ກະ​ສານ <span className="text-red">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    name="noticefile"
+                    onChange={handleFileChange}
+                    className="w-full cursor-pointer rounded-[7px] border-[1.5px] border-stroke px-3 py-[9px] text-black outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-stroke file:px-2.5 file:py-1 file:text-body-xs file:font-medium file:text-dark-5 focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-dark dark:border-dark-3 dark:bg-dark-2 dark:file:border-dark-3 dark:file:bg-white/30 dark:file:text-white"
+                  />
                 </div>
               </div>
 

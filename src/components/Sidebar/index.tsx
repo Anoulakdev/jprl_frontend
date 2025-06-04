@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
 import ClickOutside from "@/components/ClickOutside";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import { getLocalStorage } from "@/utils/storage";
 import {
   HomeIcon,
@@ -15,6 +14,7 @@ import {
   ClockIcon,
   ClipboardDocumentListIcon,
   ChevronDoubleLeftIcon,
+  BellIcon,
 } from "@heroicons/react/24/outline";
 
 interface SidebarProps {
@@ -56,17 +56,6 @@ const superadminMenuGroups = [
       },
     ],
   },
-  // {
-  //   name: "ລາຍ​ງານ",
-  //   menuItems: [
-  //     {
-  //       icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
-  //       label: "Charts",
-  //       route: "#",
-  //       children: [{ label: "Basic Chart", route: "/charts/basic-chart" }],
-  //     },
-  //   ],
-  // },
 ];
 
 const adminMenuGroups = [
@@ -82,6 +71,16 @@ const adminMenuGroups = [
         icon: <UserIcon className="h-6 w-6" />,
         label: "ສະ​ມາ​ຊິກ",
         route: "/user/admin",
+      },
+      {
+        icon: <UserIcon className="h-6 w-6" />,
+        label: "ໂຄງ​ຮ່າງ",
+        route: "/organize/organize",
+      },
+      {
+        icon: <BellIcon className="h-6 w-6" />,
+        label: "ແຈ້ງ​ການ",
+        route: "/notice",
       },
       {
         icon: <CalendarDaysIcon className="h-6 w-6" />,
@@ -137,9 +136,152 @@ const adminMenuGroups = [
   },
 ];
 
+const userBossMenuGroups = [
+  {
+    name: "ເມ​ນູ​ຫຼັກ",
+    menuItems: [
+      {
+        icon: <UserIcon className="h-6 w-6" />,
+        label: "ໂຄງ​ຮ່າງລວມ",
+        route: "/organize/organizeall",
+      },
+      {
+        icon: <BellIcon className="h-6 w-6" />,
+        label: "ແຈ້ງ​ການ",
+        route: "/notice",
+      },
+      {
+        icon: <CalendarDaysIcon className="h-6 w-6" />,
+        label: "ກິດ​ຈ​ະ​ກຳ",
+        route: "/activity/user",
+      },
+      {
+        icon: <ClockIcon className="h-6 w-6" />,
+        label: "ປະ​ຫວັດກິດ​ຈ​ະ​ກຳ",
+        route: "/activity/user/detail",
+      },
+    ],
+  },
+  {
+    name: "ລາຍ​ງານ",
+    menuItems: [
+      {
+        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
+        label: "​ການ​ເຂົ້າ​ຮ່ວມ​ກິ​ດ​ຈ​ະ​ກຳ",
+        route: "/report/yearuseract",
+      },
+      {
+        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
+        label: "ສັງ​ລວມຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
+        route: "/report/selectactuser",
+      },
+      {
+        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
+        label: "ຮູບ​ພາບຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
+        route: "/report/selectactimg",
+      },
+      {
+        icon: <ClipboardDocumentListIcon className="h-8 w-8" />,
+        label: "ສັງ​ລວມຈຳ​ນວນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳເປັນ​ປີ",
+        route: "/report/selectyearuser",
+      },
+      {
+        icon: <ClipboardDocumentListIcon className="h-9 w-9" />,
+        label: "ສັງ​ລວມຈຳ​ນວນ​​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ​ຕາມ​ ​ວ/ດ/ປ",
+        route: "/report/selectdaterange",
+      },
+    ],
+  },
+];
+
+const userUnitMenuGroups = [
+  {
+    name: "ເມ​ນູ​ຫຼັກ",
+    menuItems: [
+      {
+        icon: <UserIcon className="h-6 w-6" />,
+        label: "ໂຄງ​ຮ່າງລວມ",
+        route: "/organize/organizeall",
+      },
+      {
+        icon: <UserIcon className="h-6 w-6" />,
+        label: "ໂຄງ​ຮ່າງໜ່ວຍ",
+        route: "/organize/organize",
+      },
+      {
+        icon: <BellIcon className="h-6 w-6" />,
+        label: "ແຈ້ງ​ການ",
+        route: "/notice",
+      },
+      {
+        icon: <UserIcon className="h-6 w-6" />,
+        label: "ສະ​ມາ​ຊິກ",
+        route: "/user/user",
+      },
+      {
+        icon: <CalendarDaysIcon className="h-6 w-6" />,
+        label: "ກິດ​ຈ​ະ​ກຳ",
+        route: "/activity/user",
+      },
+      {
+        icon: <ClockIcon className="h-6 w-6" />,
+        label: "ປະ​ຫວັດກິດ​ຈ​ະ​ກຳ",
+        route: "/activity/user/detail",
+      },
+    ],
+  },
+  {
+    name: "ລາຍ​ງານ",
+    menuItems: [
+      {
+        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
+        label: "​ການ​ເຂົ້າ​ຮ່ວມ​ກິ​ດ​ຈ​ະ​ກຳ",
+        route: "/report/yearuseract",
+      },
+    ],
+  },
+];
+
+const userMemberMenuGroups = [
+  {
+    name: "ເມ​ນູ​ຫຼັກ",
+    menuItems: [
+      {
+        icon: <UserIcon className="h-6 w-6" />,
+        label: "ໂຄງ​ຮ່າງລວມ",
+        route: "/organize/organizeall",
+      },
+      {
+        icon: <BellIcon className="h-6 w-6" />,
+        label: "ແຈ້ງ​ການ",
+        route: "/notice",
+      },
+      {
+        icon: <CalendarDaysIcon className="h-6 w-6" />,
+        label: "ກິດ​ຈ​ະ​ກຳ",
+        route: "/activity/user",
+      },
+      {
+        icon: <ClockIcon className="h-6 w-6" />,
+        label: "ປະ​ຫວັດກິດ​ຈ​ະ​ກຳ",
+        route: "/activity/user/detail",
+      },
+    ],
+  },
+  {
+    name: "ລາຍ​ງານ",
+    menuItems: [
+      {
+        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
+        label: "​ການ​ເຂົ້າ​ຮ່ວມ​ກິ​ດ​ຈ​ະ​ກຳ",
+        route: "/report/yearuseract",
+      },
+    ],
+  },
+];
+
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const pathname = usePathname();
-  const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
   const [menuGroups, setMenuGroups] = useState<any[]>([]);
 
   useEffect(() => {
@@ -155,132 +297,25 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           setMenuGroups(adminMenuGroups);
           break;
         case 3:
-          const userMenuGroups = [
-            {
-              name: "ເມ​ນູ​ຫຼັກ",
-              menuItems: [
-                // Add menu items conditionally based on positionId
-                ...(storedUser.positionId === 1 ||
-                storedUser.positionId === 2 ||
-                storedUser.positionId === 3 ||
-                storedUser.positionId === 4 ||
-                storedUser.positionId === 5
-                  ? [
-                      {
-                        icon: <CalendarDaysIcon className="h-6 w-6" />,
-                        label: "ກິດ​ຈ​ະ​ກຳ",
-                        route: "/activity/user",
-                      },
-                      {
-                        icon: <ClockIcon className="h-6 w-6" />,
-                        label: "ປະ​ຫວັດກິດ​ຈ​ະ​ກຳ",
-                        route: "/activity/user/detail",
-                      },
-                    ]
-                  : []),
-                ...(storedUser.positionId === 6 || storedUser.positionId === 7
-                  ? [
-                      {
-                        icon: <UserIcon className="h-6 w-6" />,
-                        label: "ສະ​ມາ​ຊິກ",
-                        route: "/user/user",
-                      },
-                      {
-                        icon: <CalendarDaysIcon className="h-6 w-6" />,
-                        label: "ກິດ​ຈ​ະ​ກຳ",
-                        route: "/activity/user",
-                      },
-                      {
-                        icon: <ClockIcon className="h-6 w-6" />,
-                        label: "ປະ​ຫວັດກິດ​ຈ​ະ​ກຳ",
-                        route: "/activity/user/detail",
-                      },
-                    ]
-                  : []),
-                ...(storedUser.positionId === 8 ||
-                storedUser.positionId === 9 ||
-                storedUser.positionId === 10 ||
-                storedUser.positionId === 11
-                  ? [
-                      {
-                        icon: <CalendarDaysIcon className="h-6 w-6" />,
-                        label: "ກິດ​ຈ​ະ​ກຳ",
-                        route: "/activity/user",
-                      },
-                      {
-                        icon: <ClockIcon className="h-6 w-6" />,
-                        label: "ປະ​ຫວັດກິດ​ຈ​ະ​ກຳ",
-                        route: "/activity/user/detail",
-                      },
-                    ]
-                  : []),
-              ],
-            },
-            {
-              name: "ລາຍ​ງານ",
-              menuItems: [
-                // Add menu items conditionally based on positionId
-                ...(storedUser.positionId === 1 ||
-                storedUser.positionId === 2 ||
-                storedUser.positionId === 3 ||
-                storedUser.positionId === 4 ||
-                storedUser.positionId === 5
-                  ? [
-                      {
-                        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
-                        label: "​ການ​ເຂົ້າ​ຮ່ວມ​ກິ​ດ​ຈ​ະ​ກຳ",
-                        route: "/report/yearuseract",
-                      },
-                      {
-                        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
-                        label: "ສັງ​ລວມຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
-                        route: "/report/selectactuser",
-                      },
-                      {
-                        icon: (
-                          <ClipboardDocumentListIcon className="h-6 w-6" />
-                        ),
-                        label: "ຮູບ​ພາບຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
-                        route: "/report/selectactimg",
-                      },
-                      {
-                        icon: <ClipboardDocumentListIcon className="h-8 w-8" />,
-                        label: "ສັງ​ລວມຈຳ​ນວນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳເປັນ​ປີ",
-                        route: "/report/selectyearuser",
-                      },
-                      {
-                        icon: <ClipboardDocumentListIcon className="h-9 w-9" />,
-                        label:
-                          "ສັງ​ລວມຈຳ​ນວນ​​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ​ຕາມ​ ​ວ/ດ/ປ",
-                        route: "/report/selectdaterange",
-                      },
-                    ]
-                  : []),
-                ...(storedUser.positionId === 6 || storedUser.positionId === 7
-                  ? [
-                      {
-                        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
-                        label: "​ການ​ເຂົ້າ​ຮ່ວມ​ກິ​ດ​ຈ​ະ​ກຳ",
-                        route: "/report/yearuseract",
-                      },
-                    ]
-                  : []),
-                ...(storedUser.positionId === 8 ||
-                storedUser.positionId === 9 ||
-                storedUser.positionId === 10 ||
-                storedUser.positionId === 11
-                  ? [
-                      {
-                        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
-                        label: "​ການ​ເຂົ້າ​ຮ່ວມ​ກິ​ດ​ຈ​ະ​ກຳ",
-                        route: "/report/yearuseract",
-                      },
-                    ]
-                  : []),
-              ],
-            },
-          ];
-          setMenuGroups(userMenuGroups);
+          switch (storedUser.positionId) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+              setMenuGroups(userBossMenuGroups);
+              break;
+            case 6:
+            case 7:
+              setMenuGroups(userUnitMenuGroups);
+              break;
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+              setMenuGroups(userMemberMenuGroups);
+              break;
+          }
           break;
         default:
           setMenuGroups([]);
@@ -341,8 +376,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <SidebarItem
                       key={menuIndex}
                       item={menuItem}
-                      pageName={pageName}
-                      setPageName={setPageName}
+                      pathname={pathname}
                     />
                   ))}
                 </ul>

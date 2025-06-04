@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -16,7 +17,7 @@ const AddForm = () => {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    activityId: id || "", // Make sure to handle cases where id might be null
+    activityId: id || "",
     userCode: "",
     content: "",
     lat: "",
@@ -26,6 +27,7 @@ const AddForm = () => {
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDuplicate, setIsDuplicate] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   useEffect(() => {
     // Retrieve user data from localStorage
@@ -98,8 +100,10 @@ const AddForm = () => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setUploadedImage(e.target.files[0]);
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploadedImage(file);
+      setPreviewImage(URL.createObjectURL(file));
     }
   };
 
@@ -175,6 +179,16 @@ const AddForm = () => {
                   className="w-full cursor-pointer rounded-[7px] border-[1.5px] border-stroke px-3 py-[9px] text-black outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-stroke file:px-2.5 file:py-1 file:text-body-xs file:font-medium file:text-dark-5 focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-dark dark:border-dark-3 dark:bg-dark-2 dark:file:border-dark-3 dark:file:bg-white/30 dark:file:text-white"
                   required
                 />
+                {/* 👇 แสดง preview ถ้ามี */}
+                {previewImage && (
+                  <div className="mt-4">
+                    <img
+                      src={previewImage}
+                      alt="Preview"
+                      className="max-h-64 rounded border"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -182,7 +196,10 @@ const AddForm = () => {
             <div className="mt-6 flex justify-center">
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90 xl:w-1/2"
+                disabled={isSubmitting}
+                className={`flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white transition hover:bg-opacity-90 xl:w-1/2 ${
+                  isSubmitting ? "cursor-not-allowed opacity-50" : ""
+                }`}
               >
                 {isSubmitting ? "ກຳລັງບັນທຶກ..." : "ເພີ່ມຂໍ້​ມູນ"}
               </button>

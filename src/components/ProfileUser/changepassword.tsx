@@ -42,7 +42,7 @@ const ChangePassword = () => {
       // Handle errors from the backend
       if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data?.error;
-  
+
         if (errorMessage === "ລະ​ຫັດ​ໃໝ່​ບໍ່​ຕົງ​ກັນ") {
           toast.error("ລະ​ຫັດ​ໃໝ່​ບໍ່​ຕົງ​ກັນ");
         } else if (errorMessage === "User not found") {
@@ -119,7 +119,10 @@ const ChangePassword = () => {
           <div className="mt-6 flex justify-center">
             <button
               type="submit"
-              className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90 xl:w-1/2"
+              disabled={isSubmitting}
+              className={`flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white transition hover:bg-opacity-90 xl:w-1/2 ${
+                isSubmitting ? "cursor-not-allowed opacity-50" : ""
+              }`}
             >
               {isSubmitting ? "ກຳລັງບັນທຶກ..." : "ປ່ຽນ​ລະ​ຫັດ"}
             </button>

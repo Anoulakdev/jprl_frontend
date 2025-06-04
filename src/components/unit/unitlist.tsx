@@ -70,16 +70,19 @@ const UnitList: React.FC = () => {
       name: "ລ/ດ",
       cell: (row: Unit, index: number) => index + 1,
       sortable: true,
+      width: "15%",
     },
     {
       name: "ເລກ​ໜ່ວຍ",
       selector: (row: Unit) => row.no,
       sortable: true,
+      width: "15%",
     },
     {
       name: "ຊື່​ໜ່ວຍ",
       selector: (row: Unit) => row.name,
       sortable: true,
+      width: "50%",
     },
     {
       name: "#",
@@ -108,7 +111,7 @@ const UnitList: React.FC = () => {
       style: {
         fontWeight: "bold",
         fontSize: "16px",
-        // width: "150px",
+        width: "200px",
       },
     },
     cells: {

@@ -23,11 +23,9 @@ export default function LoginPage() {
         router.push("/dashboard");
       } else if (
         user.roleId === 3 &&
-        [1, 2, 3, 4, 5, 8, 9, 10, 11].includes(user.positionId)
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].includes(user.positionId)
       ) {
-        router.push("/activity/user");
-      } else if (user.roleId === 3 && [6, 7].includes(user.positionId)) {
-        router.push("/user/user");
+        router.push("/organize/organizeall");
       } else {
         toast.error("ບົດບາດຂອງຜູ້ໃຊ້ບໍ່ຖືກຕ້ອງ");
       }
@@ -138,7 +136,7 @@ export default function LoginPage() {
 
     <div className="flex min-h-screen items-center justify-center bg-blue-200 px-2">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-        <div className="flex flex-col items-center text-center mb-5">
+        <div className="mb-5 flex flex-col items-center text-center">
           <Image src={`/jprl_logo.png`} alt="nophoto" width={80} height={80} />
           <h2 className="mt-2 text-3xl font-bold text-blue-600">
             ຄ​ຊ​ປ​ປ​ລ ຮາກ​ຖານ ຟ​ຟ​ລ

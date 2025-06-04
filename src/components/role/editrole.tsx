@@ -49,10 +49,7 @@ const EditForm: React.FC = () => {
 
     try {
       setIsLoading(true); // Set loading during submission
-      await axiosInstance.put(
-        `/roles/${role.id}`,
-        role,
-      );
+      await axiosInstance.put(`/roles/${role.id}`, role);
       toast.success("ອັບ​ເດດ​ສຳ​ເລັດ​ແລ​້ວ");
       router.push("/role");
     } catch (error) {
@@ -108,7 +105,9 @@ const EditForm: React.FC = () => {
               <div className="mt-6 flex justify-center">
                 <button
                   type="submit"
-                  className="flex w-full xl:w-1/2 justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90"
+                  className={`flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white transition hover:bg-opacity-90 md:w-1/2 xl:w-1/2 ${
+                    isLoading ? "cursor-not-allowed opacity-50" : ""
+                  }`}
                   disabled={isLoading} // Disable button when loading
                 >
                   {isLoading ? "ກຳລັງອັບເດດ..." : "ອັບ​ເດດ"}

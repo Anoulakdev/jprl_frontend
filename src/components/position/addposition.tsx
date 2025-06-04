@@ -88,7 +88,10 @@ const AddForm = () => {
           <div className="mt-6 flex justify-center">
             <button
               type="submit"
-              className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90 xl:w-1/2"
+              disabled={isSubmitting}
+              className={`flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white transition hover:bg-opacity-90 xl:w-1/2 ${
+                isSubmitting ? "cursor-not-allowed opacity-50" : ""
+              }`}
             >
               {isSubmitting ? "ກຳລັງບັນທຶກ..." : "ເພີ່ມຂໍ້​ມູນ"}
             </button>

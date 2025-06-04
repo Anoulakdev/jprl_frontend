@@ -94,12 +94,22 @@ const EditForm = () => {
 
     try {
       setIsLoading(true);
-      const updatedUser = {
-        ...user,
-        userimg: uploadedImage || user.userimg, // Set the uploaded image name
-      };
 
-      await axiosInstance.put(`/users/${user.id}`, updatedUser, {
+      const formData = new FormData();
+      formData.append("firstname", user.firstname);
+      formData.append("lastname", user.lastname);
+      formData.append("gender", user.gender);
+      formData.append("tel", user.tel || "");
+      formData.append("roleId", String(user.roleId));
+      formData.append("positionId", String(user.positionId));
+      formData.append("unitId", String(user.unitId));
+      formData.append("chuId", String(user.chuId));
+
+      if (uploadedImage) {
+        formData.append("userimg", uploadedImage);
+      }
+
+      await axiosInstance.put(`/users/${user.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -241,7 +251,9 @@ const EditForm = () => {
           <div className="mt-6 flex justify-center">
             <button
               type="submit"
-              className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90 md:w-1/2 xl:w-1/2"
+              className={`flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white transition hover:bg-opacity-90 md:w-1/2 xl:w-1/2 ${
+                isLoading ? "cursor-not-allowed opacity-50" : ""
+              }`}
               disabled={isLoading} // Disable button when loading
             >
               {isLoading ? "ກຳລັງອັບເດດ..." : "ອັບ​ເດດ"}

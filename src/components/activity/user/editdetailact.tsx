@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
@@ -20,15 +21,14 @@ const EditForm = () => {
   const [act, setAct] = useState<DetailAct | null>(null);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null); // Stores the image name for display
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
       setIsLoading(true);
       // Fetch user data when the component mounts
       axiosInstance
-        .get<DetailAct>(
-          `/detailacts/${id}`,
-        )
+        .get<DetailAct>(`/detailacts/${id}`)
         .then((response) => {
           setAct(response.data);
         })
@@ -56,7 +56,8 @@ const EditForm = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setUploadedImage(file); // Set the actual file
+      setUploadedImage(file);
+      setPreviewImage(URL.createObjectURL(file));
     }
   };
 
@@ -72,15 +73,11 @@ const EditForm = () => {
         actimg: uploadedImage || act.actimg, // Set the uploaded image name
       };
 
-      await axiosInstance.put(
-        `/detailacts/${act.id}`,
-        updatedAct,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      await axiosInstance.put(`/detailacts/${act.id}`, updatedAct, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      );
+      });
 
       toast.success("ອັບ​ເດດ​ສຳ​ເລັດ​ແລ​້ວ");
       router.push("/activity/user/detail");
@@ -113,7 +110,7 @@ const EditForm = () => {
             </div>
             <div className="w-full xl:w-1/2">
               <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
-                ຮູບ​ພາບ
+                ຮູບ​ພາບ <span className="text-red">*</span>
               </label>
               <input
                 type="file"
@@ -122,28 +119,40 @@ const EditForm = () => {
                 onChange={handleFileChange}
                 className="w-full cursor-pointer rounded-[7px] border-[1.5px] border-stroke px-3 py-[9px] text-black outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-stroke file:px-2.5 file:py-1 file:text-body-xs file:font-medium file:text-dark-5 focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-dark dark:border-dark-3 dark:bg-dark-2 dark:file:border-dark-3 dark:file:bg-white/30 dark:file:text-white"
               />
-            </div>
-          </div>
-
-          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
-            <div className="w-full md:w-1/4 lg:w-1/4">
-              {act?.actimg && (
-                <Image
-                  className="mt-5"
-                  src={`${process.env.NEXT_PUBLIC_API_URL}/upload/activity/${act.actimg}`}
-                  alt={act.actimg}
-                  width={100}
-                  height={100}
-                />
+              {/* 👇 แสดง preview ถ้ามี */}
+              {previewImage && (
+                <div className="mt-4">
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    className="max-h-64 rounded border"
+                  />
+                </div>
               )}
             </div>
           </div>
 
+          {/* <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
+            <div className="w-full md:w-1/4 lg:w-1/4">
+              {act?.actimg && (
+                <img
+                  className="mt-5"
+                  src={`${process.env.NEXT_PUBLIC_API_URL}/upload/activity/${act.actimg}`}
+                  alt={act.actimg}
+                  width={200}
+                  height={200}
+                />
+              )}
+            </div>
+          </div> */}
+
           <div className="mt-6 flex justify-center">
             <button
               type="submit"
-              className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90 md:w-1/2 xl:w-1/2"
-              disabled={isLoading} // Disable button when loading
+              className={`flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white transition hover:bg-opacity-90 md:w-1/2 xl:w-1/2 ${
+                isLoading ? "cursor-not-allowed opacity-50" : ""
+              }`}
+              disabled={isLoading}
             >
               {isLoading ? "ກຳລັງອັບເດດ..." : "ອັບ​ເດດ"}
             </button>

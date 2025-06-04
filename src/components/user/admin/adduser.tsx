@@ -48,7 +48,7 @@ const AddForm = () => {
   useEffect(() => {
     const fetchPositions = async () => {
       try {
-        const response = await axiosInstance.get(`/positions`);
+        const response = await axiosInstance.get(`/positions/sposition`);
         setPositionss(response.data);
       } catch (error) {
         console.error("Error fetching positions:", error);
@@ -62,7 +62,7 @@ const AddForm = () => {
   useEffect(() => {
     const fetchUnits = async () => {
       try {
-        const response = await axiosInstance.get(`/units`);
+        const response = await axiosInstance.get(`/units/sunit`);
         setUnitss(response.data);
       } catch (error) {
         console.error("Error fetching units:", error);
@@ -74,9 +74,16 @@ const AddForm = () => {
   }, []);
 
   useEffect(() => {
+    if (!formData.unitId) {
+      setChuss([]); // เคลียร์ chus ถ้ายังไม่เลือก unit
+      return;
+    }
+
     const fetchChus = async () => {
       try {
-        const response = await axiosInstance.get(`/chus`);
+        const response = await axiosInstance.get(
+          `/chus/schu?unitId=${formData.unitId}`,
+        );
         setChuss(response.data);
       } catch (error) {
         console.error("Error fetching chus:", error);
@@ -85,7 +92,7 @@ const AddForm = () => {
     };
 
     fetchChus();
-  }, []);
+  }, [formData.unitId]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -109,18 +116,27 @@ const AddForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Add the image name to the form data
-      const userData = {
-        ...formData,
-        userimg: uploadedImage || null, // Set the uploaded image name
-      };
+      const formDataToSend = new FormData();
+      formDataToSend.append("code", formData.code);
+      formDataToSend.append("firstname", formData.firstname);
+      formDataToSend.append("lastname", formData.lastname);
+      formDataToSend.append("gender", formData.gender);
+      formDataToSend.append("tel", formData.tel);
+      formDataToSend.append("roleId", String(formData.roleId));
+      formDataToSend.append("positionId", String(formData.positionId));
+      formDataToSend.append("unitId", String(formData.unitId));
+      formDataToSend.append("chuId", String(formData.chuId));
 
-      // Submit the form data
-      await axiosInstance.post(`/users`, userData, {
+      if (uploadedImage) {
+        formDataToSend.append("userimg", uploadedImage);
+      }
+
+      await axiosInstance.post("/users", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
       toast.success("ເພີ່ມ​ຂໍ້​ມູນ​​ສຳ​ເລັ​ດ​ແລ້ວ​");
       router.push("/user/admin");
     } catch (error) {
@@ -365,7 +381,10 @@ const AddForm = () => {
           <div className="mt-6 flex justify-center">
             <button
               type="submit"
-              className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90 md:w-1/2 xl:w-1/2"
+              disabled={isSubmitting}
+              className={`flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white transition hover:bg-opacity-90 md:w-1/2 xl:w-1/2 ${
+                isSubmitting ? "cursor-not-allowed opacity-50" : ""
+              }`}
             >
               {isSubmitting ? "ກຳລັງບັນທຶກ..." : "ເພີ່ມຂໍ້​ມູນ"}
             </button>

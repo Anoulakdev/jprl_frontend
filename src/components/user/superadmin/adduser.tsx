@@ -40,14 +40,20 @@ const AddForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Add the image name to the form data
-      const userData = {
-        ...formData,
-        userimg: uploadedImage || null, // Set the uploaded image name
-      };
+      const formDataToSend = new FormData();
+      formDataToSend.append("username", formData.username);
+      formDataToSend.append("firstname", formData.firstname);
+      formDataToSend.append("lastname", formData.lastname);
+      formDataToSend.append("gender", formData.gender);
+      formDataToSend.append("tel", formData.tel);
+      formDataToSend.append("roleId", String(formData.roleId));
+
+      if (uploadedImage) {
+        formDataToSend.append("userimg", uploadedImage);
+      }
 
       // Submit the form data
-      await axiosInstance.post(`/users`, userData, {
+      await axiosInstance.post(`/users`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -178,7 +184,10 @@ const AddForm = () => {
           <div className="mt-6 flex justify-center">
             <button
               type="submit"
-              className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90 md:w-1/2 xl:w-1/2"
+              disabled={isSubmitting}
+              className={`flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white transition hover:bg-opacity-90 md:w-1/2 xl:w-1/2 ${
+                isSubmitting ? "cursor-not-allowed opacity-50" : ""
+              }`}
             >
               {isSubmitting ? "ກຳລັງບັນທຶກ..." : "ເພີ່ມຂໍ້​ມູນ"}
             </button>

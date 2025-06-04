@@ -217,6 +217,9 @@ const EditForm = () => {
     setIsLoading(true);
 
     try {
+      const formData = new FormData();
+
+      // ฟอร์แมตวันที่ก่อน
       const fdatebirth = moment(user.datebirth, "DD/MM/YYYY").format(
         "YYYY-MM-DD",
       );
@@ -248,41 +251,74 @@ const EditForm = () => {
         "YYYY-MM-DD",
       );
 
-      const updatedUserall = {
-        ...user,
-        userimg: uploadedImage || user.userimg,
-        datebirth: fdatebirth || null,
-        phaksupport: fphaksupport || null,
-        phakrule: fphakrule || null,
-        phaksamhong: fphaksamhong || null,
-        phaksomboun: fphaksomboun || null,
-        phakissuedcard: fphakissuedcard || null,
-        latcomein: flatcomein || null,
-        kammabancomein: fkammabancomein || null,
-        youthcomein: fyouthcomein || null,
-        womencomein: fwomencomein || null,
-      };
+      // ใส่ค่าทุกช่องลงใน FormData
+      formData.append("firstname", user.firstname || "");
+      formData.append("lastname", user.lastname || "");
+      formData.append("gender", user.gender || "");
+      formData.append("tel", user.tel || "");
+      formData.append("datebirth", fdatebirth || "");
+      formData.append("tribe", user.tribe || "");
+      formData.append("religion", user.religion || "");
+      formData.append("villagebirth", user.villagebirth || "");
+      formData.append("districtbirth", user.districtbirth || "");
+      formData.append("provincebirth", user.provincebirth || "");
+      formData.append("villagenow", user.villagenow || "");
+      formData.append("districtnow", user.districtnow || "");
+      formData.append("provincenow", user.provincenow || "");
+      formData.append("edusaman", user.edusaman || "");
+      formData.append("edulevel", user.edulevel || "");
+      formData.append("edusubject", user.edusubject || "");
+      formData.append("edutheory", user.edutheory || "");
+      formData.append("phaksupport", fphaksupport || "");
+      formData.append("phakrule", fphakrule || "");
+      formData.append("phaksamhong", fphaksamhong || "");
+      formData.append("phaksomboun", fphaksomboun || "");
+      formData.append("phakposition", user.phakposition || "");
+      formData.append("phakcard", user.phakcard || "");
+      formData.append("phakissuedcard", fphakissuedcard || "");
+      formData.append("phakbook", user.phakbook || "");
+      formData.append("latcomein", flatcomein || "");
+      formData.append("latposition", user.latposition || "");
+      formData.append("kammabancomein", fkammabancomein || "");
+      formData.append("kammabanposition", user.kammabanposition || "");
+      formData.append("youthcomein", fyouthcomein || "");
+      formData.append("womencomein", fwomencomein || "");
+      formData.append("womenposition", user.womenposition || "");
 
-      // console.log("show:", updatedUserall);
-      await axiosInstance.put(
-        `/users/updateprofile/${user.id}`,
-        updatedUserall,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
+      // Arrays: ต้องแปลงก่อน หรือวนลูปใส่เอง
+      user.arts.forEach((item, index) =>
+        formData.append(`arts[${index}]`, item),
       );
+      user.sports.forEach((item, index) =>
+        formData.append(`sports[${index}]`, item),
+      );
+      user.fbusiness.forEach((item, index) =>
+        formData.append(`fbusiness[${index}]`, item),
+      );
+      user.ideas.forEach((item, index) =>
+        formData.append(`ideas[${index}]`, item),
+      );
+
+      // รูปภาพ
+      if (uploadedImage) {
+        formData.append("userimg", uploadedImage);
+      }
+
+      await axiosInstance.put(`/users/updateprofile/${user.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       removeLocalStorage("token");
       removeLocalStorage("user");
       toast.success("ອັບ​ເດດຂໍ້​ມູນ​ສຳ​ເລັດ ກະ​ລຸ​ນາ​ເຂົ້າ​ລະ​ບົບ​ໃໝ່");
       router.push("/");
     } catch (error) {
-      console.error("Error during form submission:", error); // Log any errors
+      console.error("Error during form submission:", error);
       toast.error("ອັບ​ເດດ​ບໍ່​ສຳ​ເລັດ");
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
@@ -947,7 +983,9 @@ const EditForm = () => {
           <div className="mt-6 flex justify-center">
             <button
               type="submit"
-              className="flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white hover:bg-opacity-90 md:w-1/2 xl:w-1/2"
+              className={`flex w-full justify-center rounded-[7px] bg-primary p-[13px] font-medium text-white transition hover:bg-opacity-90 md:w-1/2 xl:w-1/2 ${
+                isLoading ? "cursor-not-allowed opacity-50" : ""
+              }`}
               disabled={isLoading} // Disable button when loading
             >
               {isLoading ? "ກຳລັງອັບເດດ..." : "ອັບ​ເດດ"}

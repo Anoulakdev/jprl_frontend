@@ -9,9 +9,11 @@ import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
 
 const AddForm = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    dateactive: "",
+    title: "",
+    date: "",
+    noticefile: "",
   });
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
@@ -24,6 +26,12 @@ const AddForm = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setUploadedImage(e.target.files[0]); // Directly set the file
+    }
   };
 
   useEffect(() => {
@@ -40,7 +48,7 @@ const AddForm = () => {
       onChange: (selectedDates, dateStr, instance) => {
         setFormData((prevData) => ({
           ...prevData,
-          dateactive: dateStr,
+          date: dateStr,
         }));
       },
     });
@@ -52,20 +60,25 @@ const AddForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Convert dateactive to yyyy-mm-dd format using Moment.js
-      const formattedDate = moment(formData.dateactive, "DD/MM/YYYY").format(
-        "YYYY-MM-DD",
+      const formDataToSend = new FormData();
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append(
+        "date",
+        moment(formData.date, "DD/MM/YYYY").format("YYYY-MM-DD"),
       );
 
-      // Update formData with formatted date
-      const updatedFormData = {
-        ...formData,
-        dateactive: formattedDate,
-      };
-      // Submit the form data
-      await axiosInstance.post(`/activitys`, updatedFormData); // Ensure this is the correct endpoint
+      if (uploadedImage) {
+        formDataToSend.append("noticefile", uploadedImage);
+      }
+
+      await axiosInstance.post("/notices", formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       toast.success("ເພີ່ມ​ຂໍ້​ມູນ​​ສຳ​ເລັ​ດ​ແລ້ວ​");
-      router.push("/activity/admin");
+      router.push("/notice");
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("ເພີ່ມ​ຂໍ້​ມູນ​ບໍ່ສຳ​ເລັ​ດ");
@@ -80,29 +93,14 @@ const AddForm = () => {
         <div className="p-6.5">
           <div className="mb-4.5 flex flex-col gap-4.5 xl:flex-row">
             {/* Name Field */}
-            <div className="w-full xl:w-1/2">
-              <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
-                ຫົວ​ຂໍ້​ກິດ​ຈະ​ກຳ <span className="text-red">*</span>
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="ຫົວ​ຂໍ້​ກິດ​ຈະ​ກຳ"
-                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-                required
-              />
-            </div>
-
-            <div className="w-full xl:w-1/2">
+            <div className="w-full xl:w-1/3">
               <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
-                ມື້​ເລີ່ມ​ກິດ​ຈະ​ກຳ <span className="text-red">*</span>
+                ວັນ​ທີ <span className="text-red">*</span>
               </label>
               <div className="relative">
                 <input
-                  name="dateactive"
-                  value={formData.dateactive}
+                  name="date"
+                  value={formData.date}
                   onChange={handleChange}
                   className="form-datepicker w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary"
                   placeholder="dd/mm/yyyy"
@@ -116,6 +114,33 @@ const AddForm = () => {
                   <ArrowDownCircleIcon className="mt-3 h-6 w-6 md:mt-3 lg:mt-1" />
                 </div>
               </div>
+            </div>
+            <div className="w-full xl:w-1/3">
+              <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
+                ຫົວ​ຂໍ້​ແຈ້ງ​ການ <span className="text-red">*</span>
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="ຫົວ​ຂໍ້​ແຈ້ງ​ການ"
+                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+                required
+              />
+            </div>
+            <div className="w-full xl:w-1/3">
+              <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
+                ເອ​ກະ​ສານ <span className="text-red">*</span>
+              </label>
+              <input
+                type="file"
+                accept="application/pdf"
+                name="noticefile"
+                onChange={handleFileChange}
+                className="w-full cursor-pointer rounded-[7px] border-[1.5px] border-stroke px-3 py-[9px] text-black outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-stroke file:px-2.5 file:py-1 file:text-body-xs file:font-medium file:text-dark-5 focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-dark dark:border-dark-3 dark:bg-dark-2 dark:file:border-dark-3 dark:file:bg-white/30 dark:file:text-white"
+                required
+              />
             </div>
           </div>
 

@@ -86,7 +86,7 @@ const Report: React.FC = () => {
   useEffect(() => {
     const fetchUnits = async () => {
       try {
-        const response = await axiosInstance.get(`/units`);
+        const response = await axiosInstance.get(`/units/sunit`);
         setUnits(response.data);
       } catch (error) {
         console.error("Error fetching units:", error);
@@ -99,17 +99,24 @@ const Report: React.FC = () => {
 
   useEffect(() => {
     const fetchChus = async () => {
+      if (!selectedUnit) {
+        setChus([]);
+        return;
+      }
       try {
-        const response = await axiosInstance.get(`/chus`);
+        const response = await axiosInstance.get(
+          `/chus/schu?unitId=${selectedUnit}`,
+        );
         setChus(response.data);
       } catch (error) {
         console.error("Error fetching chus:", error);
-        toast.error("Failed to load chus");
+        toast.error("โหลดรายชื่อหมู่ไม่สำเร็จ");
       }
     };
 
     fetchChus();
-  }, []);
+    setSelectedChu(null); // reset selected chu when unit changes
+  }, [selectedUnit]);
 
   const fetchReportData = async () => {
     try {
