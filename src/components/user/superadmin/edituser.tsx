@@ -96,6 +96,7 @@ const EditForm = () => {
       setIsLoading(true);
 
       const formData = new FormData();
+      formData.append("username", user.username);
       formData.append("firstname", user.firstname);
       formData.append("lastname", user.lastname);
       formData.append("gender", user.gender);
@@ -113,6 +114,8 @@ const EditForm = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
       });
 
       toast.success("ອັບ​ເດດ​ສຳ​ເລັດ​ແລ​້ວ");
