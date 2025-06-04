@@ -148,6 +148,8 @@ const EditForm = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
       });
 
       toast.success("ອັບ​ເດດ​ສຳ​ເລັດ​ແລ​້ວ");

@@ -95,6 +95,8 @@ const OrganizeList: React.FC = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
       });
 
       setData(response.data);
@@ -129,6 +131,8 @@ const OrganizeList: React.FC = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity,
         },
       );
 

@@ -112,18 +112,27 @@ const AddForm = () => {
     setIsSubmitting(true);
 
     try {
-      const actData = {
-        ...formData,
-        actimg: uploadedImage || null,
-      };
+      // ✅ สร้าง FormData แล้ว append field ลงไปทีละอัน
+      const formDataToSend = new FormData();
+      formDataToSend.append("activityId", String(formData.activityId));
+      formDataToSend.append("userCode", formData.userCode);
+      formDataToSend.append("content", formData.content);
+      formDataToSend.append("lat", formData.lat);
+      formDataToSend.append("lng", formData.lng);
 
-      // console.log(actData);
+      if (uploadedImage) {
+        formDataToSend.append("actimg", uploadedImage); // 👈 สำคัญ
+      }
 
-      await axiosInstance.post(`/detailacts`, actData, {
+      // ✅ ส่งด้วย axios แบบ multipart/form-data
+      await axiosInstance.post(`/detailacts`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
       });
+
       toast.success("ເພີ່ມ​ຂໍ້​ມູນ​​ສຳ​ເລັ​ດ​ແລ້ວ​");
       router.push("/activity/user/detail");
     } catch (error) {

@@ -8,7 +8,7 @@ import Image from "next/image";
 
 interface DetailAct {
   id: number;
-  userCode: "33656";
+  userCode: string;
   content: string;
   lat: string;
   lng: string;
@@ -68,24 +68,33 @@ const EditForm = () => {
     if (!act) return;
 
     try {
-      const updatedAct = {
-        ...act,
-        actimg: uploadedImage || act.actimg, // Set the uploaded image name
-      };
+      const formDataToSend = new FormData();
 
-      await axiosInstance.put(`/detailacts/${act.id}`, updatedAct, {
+      formDataToSend.append("userCode", act.userCode);
+      formDataToSend.append("content", act.content);
+      formDataToSend.append("lat", act.lat);
+      formDataToSend.append("lng", act.lng);
+
+      // ถ้ามีการอัปโหลดใหม่ ใช้อันใหม่ ไม่งั้นใช้ชื่อเดิม
+      if (uploadedImage) {
+        formDataToSend.append("actimg", uploadedImage); // รูปภาพแนบโดยตรง
+      }
+
+      await axiosInstance.put(`/detailacts/${act.id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
       });
 
       toast.success("ອັບ​ເດດ​ສຳ​ເລັດ​ແລ​້ວ");
       router.push("/activity/user/detail");
     } catch (error) {
-      console.error("Error during form submission:", error); // Log any errors
+      console.error("Error during form submission:", error);
       toast.error("ອັບ​ເດດ​ບໍ່​ສຳ​ເລັດ");
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
@@ -96,7 +105,7 @@ const EditForm = () => {
           <div className="mb-4.5 flex flex-col gap-4.5 xl:flex-row">
             <div className="w-full xl:w-1/2">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
-                ຈຸ <span className="text-red">*</span>
+                ເນື້ອ​ໃນ​ການ​ມາ​ກິດ​ຈະ​ກຳ <span className="text-red">*</span>
               </label>
               <textarea
                 name="content"

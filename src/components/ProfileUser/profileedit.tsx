@@ -308,6 +308,8 @@ const EditForm = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
       });
 
       removeLocalStorage("token");
