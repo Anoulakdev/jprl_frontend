@@ -28,7 +28,6 @@ const UnitList: React.FC = () => {
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Failed to load user data");
       } finally {
         setLoading(false);
       }

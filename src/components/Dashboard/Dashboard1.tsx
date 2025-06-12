@@ -68,7 +68,6 @@ const DataStatsOne: React.FC<dataStats> = () => {
         setActs(response.data);
       } catch (error) {
         console.error("Error fetching activitys:", error);
-        toast.error("Failed to load activitys");
       }
     };
 
@@ -82,7 +81,6 @@ const DataStatsOne: React.FC<dataStats> = () => {
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
-        toast.error("Failed to load users");
       }
     };
 
@@ -97,7 +95,6 @@ const DataStatsOne: React.FC<dataStats> = () => {
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching units:", error);
-        toast.error("Failed to load units");
       }
     };
 
@@ -111,7 +108,6 @@ const DataStatsOne: React.FC<dataStats> = () => {
         setChus(response.data);
       } catch (error) {
         console.error("Error fetching chus:", error);
-        toast.error("Failed to load chus");
       }
     };
 

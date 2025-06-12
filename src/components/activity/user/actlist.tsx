@@ -31,7 +31,6 @@ const ActList: React.FC = () => {
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Failed to load activity data");
       } finally {
         setLoading(false);
       }
@@ -98,7 +97,7 @@ const ActList: React.FC = () => {
                 </div>
               ))
           ) : (
-            <div className="py-15 text-center text-2xl font-bold text-red-600">
+            <div className="w-full py-15 text-center text-2xl font-bold text-red-600">
               ຍັງ​ບໍ່​ທັນ​ມີ​ກິດ​ຈະ​ກຳ​ໃນ​ມື້​ນີ້
             </div>
           )}

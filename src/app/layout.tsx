@@ -8,6 +8,8 @@ import Loader from "@/components/common/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrelineScript from "./components/PrelineScript";
+import { useRouter } from "next/navigation";
+import { setupInterceptors } from "@/utils/axiosInstance";
 
 export default function RootLayout({
   children,
@@ -16,12 +18,19 @@ export default function RootLayout({
 }>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   // const pathname = usePathname();
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
-  }, []);
+    setupInterceptors(router);
+
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timeout); // cleanup เผื่อ component ถูก unmount เร็ว
+  }, [router]);
 
   return (
     <html lang="en">

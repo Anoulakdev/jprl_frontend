@@ -17,7 +17,9 @@ const PositionList: React.FC = () => {
   const [data, setData] = useState<Position[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const [positionToDelete, setPositionToDelete] = useState<Position | null>(null);
+  const [positionToDelete, setPositionToDelete] = useState<Position | null>(
+    null,
+  );
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +30,6 @@ const PositionList: React.FC = () => {
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Failed to load user data");
       } finally {
         setLoading(false);
       }
@@ -53,7 +54,9 @@ const PositionList: React.FC = () => {
     if (positionToDelete) {
       try {
         await axiosInstance.delete(`/positions/${positionToDelete.id}`);
-        const deletedData = data.filter((position) => position.id !== positionToDelete.id);
+        const deletedData = data.filter(
+          (position) => position.id !== positionToDelete.id,
+        );
         setData(deletedData);
         toast.success("ລົ​ບ​ຂໍ້ມູນ​ສຳ​ເລັດ​ແລ້ວ");
       } catch (error) {

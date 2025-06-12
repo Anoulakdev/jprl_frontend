@@ -45,7 +45,6 @@ const ActList: React.FC = () => {
         setFilteredData(response.data); // Initialize filtered data with fetched data
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Failed to load user data");
       } finally {
         setLoading(false);
       }

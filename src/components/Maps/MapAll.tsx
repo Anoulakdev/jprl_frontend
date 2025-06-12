@@ -47,7 +47,6 @@ export default function MapComponent() {
         })
         .catch((error) => {
           console.error("Error fetching location data:", error);
-          toast.error("Error fetching location data");
         })
         .finally(() => {
           setIsLoading(false);
