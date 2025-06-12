@@ -275,7 +275,7 @@ const UserList: React.FC = () => {
     },
     {
       name: "​ຕຳ​ແໜ່ງ",
-      selector: (row: User) => row.position.name,
+      selector: (row: User) => row.position?.name,
       sortable: true,
       width: "13%",
     },
@@ -292,7 +292,7 @@ const UserList: React.FC = () => {
     },
     {
       name: "​​ຈຸ",
-      selector: (row: User) => row.chu.name,
+      selector: (row: User) => row.chu?.name,
       sortable: true,
     },
     {
