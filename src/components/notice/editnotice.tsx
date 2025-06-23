@@ -6,6 +6,7 @@ import { useRouter, useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
+import { decryptId } from "@/lib/cryptoId";
 
 interface Notice {
   id: number;
@@ -24,9 +25,18 @@ const EditForm: React.FC = () => {
   useEffect(() => {
     if (!id) return;
 
-    setIsLoading(true); // Set loading to true before fetching
+    setIsLoading(true);
+
+    let decryptedId: string;
+    try {
+      decryptedId = decryptId(decodeURIComponent(id as string));
+    } catch (err) {
+      router.replace("/unauthorized");
+      return;
+    }
+
     axiosInstance
-      .get<Notice>(`/notices/${id}`)
+      .get<Notice>(`/notices/${decryptedId}`)
       .then((response) => {
         console.log("API Response:", response.data);
         const notice = response.data;
@@ -44,7 +54,7 @@ const EditForm: React.FC = () => {
       .finally(() => {
         setIsLoading(false); // Stop loading
       });
-  }, [id]);
+  }, [id, router]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,

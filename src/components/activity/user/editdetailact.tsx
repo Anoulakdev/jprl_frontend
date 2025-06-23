@@ -5,6 +5,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import { useRouter, useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import { decryptId } from "@/lib/cryptoId";
 
 interface DetailAct {
   id: number;
@@ -26,9 +27,17 @@ const EditForm = () => {
   useEffect(() => {
     if (id) {
       setIsLoading(true);
-      // Fetch user data when the component mounts
+
+      let decryptedId: string;
+      try {
+        decryptedId = decryptId(decodeURIComponent(id as string));
+      } catch (err) {
+        router.replace("/unauthorized");
+        return;
+      }
+
       axiosInstance
-        .get<DetailAct>(`/detailacts/${id}`)
+        .get<DetailAct>(`/detailacts/${decryptedId}`)
         .then((response) => {
           setAct(response.data);
         })
@@ -40,7 +49,7 @@ const EditForm = () => {
           setIsLoading(false); // Stop loading
         });
     }
-  }, [id]);
+  }, [id, router]);
 
   const handleChange = (
     e: React.ChangeEvent<

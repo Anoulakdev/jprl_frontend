@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import DataTable from "react-data-table-component";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { encryptId } from "@/lib/cryptoId";
 
 interface DetailAct {
   id: number;
@@ -58,7 +59,8 @@ const ActList: React.FC = () => {
   }, []);
 
   const handleEdit = (id: number) => {
-    router.push(`/activity/admin/edit/${id}`);
+    const encryptedId = encryptId(id);
+    router.push(`/activity/admin/edit/${encryptedId}`);
   };
 
   const handleDeleteClick = (id: number) => {

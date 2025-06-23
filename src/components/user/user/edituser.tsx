@@ -4,6 +4,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import { useRouter, useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import { decryptId } from "@/lib/cryptoId";
 
 interface User {
   id: number;
@@ -58,9 +59,17 @@ const EditForm = () => {
   useEffect(() => {
     if (id) {
       setIsLoading(true);
-      // Fetch user data when the component mounts
+
+      let decryptedId: string;
+      try {
+        decryptedId = decryptId(decodeURIComponent(id as string));
+      } catch (err) {
+        router.replace("/unauthorized");
+        return;
+      }
+
       axiosInstance
-        .get<User>(`/users/${id}`)
+        .get<User>(`/users/${decryptedId}`)
         .then((response) => {
           setUser(response.data);
         })
@@ -72,7 +81,7 @@ const EditForm = () => {
           setIsLoading(false); // Stop loading
         });
     }
-  }, [id]);
+  }, [id, router]);
 
   useEffect(() => {
     const fetchPositions = async () => {

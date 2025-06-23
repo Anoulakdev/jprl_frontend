@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import { useRouter, useParams } from "next/navigation";
 import { toast } from "react-toastify";
+import { decryptId } from "@/lib/cryptoId";
 
 interface Chu {
   id: number;
@@ -28,9 +29,18 @@ const EditForm: React.FC = () => {
   useEffect(() => {
     if (!id) return;
 
-    setIsLoading(true); // Set loading to true before fetching
+    setIsLoading(true);
+
+    let decryptedId: string;
+    try {
+      decryptedId = decryptId(decodeURIComponent(id as string));
+    } catch (err) {
+      router.replace("/unauthorized");
+      return;
+    }
+
     axiosInstance
-      .get<Chu>(`/chus/${id}`)
+      .get<Chu>(`/chus/${decryptedId}`)
       .then((response) => {
         setChu(response.data);
       })
@@ -41,7 +51,7 @@ const EditForm: React.FC = () => {
       .finally(() => {
         setIsLoading(false); // Stop loading
       });
-  }, [id]);
+  }, [id, router]);
 
   useEffect(() => {
     const fetchUnits = async () => {

@@ -7,6 +7,7 @@ import { useRouter, useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import { getLocalStorage } from "@/utils/storage";
+import { decryptId } from "@/lib/cryptoId";
 
 interface User {
   code: string;
@@ -16,8 +17,9 @@ const AddForm = () => {
   const router = useRouter();
   const { id } = useParams();
 
+  const [decryptedId, setDecryptedId] = useState<string>("");
   const [formData, setFormData] = useState({
-    activityId: id || "",
+    activityId: "",
     userCode: "",
     content: "",
     lat: "",
@@ -28,6 +30,19 @@ const AddForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const decId = decryptId(decodeURIComponent(id as string));
+      setDecryptedId(decId);
+      setFormData((prev) => ({
+        ...prev,
+        activityId: decId,
+      }));
+    } catch (err) {
+      router.replace("/unauthorized");
+    }
+  }, [id, router]);
 
   useEffect(() => {
     // Retrieve user data from localStorage
@@ -66,11 +81,10 @@ const AddForm = () => {
   useEffect(() => {
     const checkDuplicateRecord = async () => {
       try {
-        // Use formData.userCode instead of userCode directly
         const response = await axiosInstance.get(`/detailacts/checkact`, {
           params: {
-            activityId: id,
-            userCode: formData.userCode, // Fix: use formData.userCode here
+            activityId: decryptedId,
+            userCode: formData.userCode,
           },
         });
 
@@ -82,10 +96,10 @@ const AddForm = () => {
       }
     };
 
-    if (id && formData.userCode) {
+    if (decryptedId && formData.userCode) {
       checkDuplicateRecord();
     }
-  }, [id, formData.userCode]);
+  }, [decryptedId, formData.userCode]);
 
   const handleChange = (
     e: React.ChangeEvent<

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import { useRouter, useParams } from "next/navigation";
 import { toast } from "react-toastify";
+import { decryptId } from "@/lib/cryptoId";
 
 interface Role {
   id: number;
@@ -19,10 +20,17 @@ const EditForm: React.FC = () => {
 
   useEffect(() => {
     if (!id) return;
+    setIsLoading(true);
 
-    setIsLoading(true); // Set loading to true before fetching
+    let decryptedId: string;
+    try {
+      decryptedId = decryptId(decodeURIComponent(id as string));
+    } catch (err) {
+      router.replace("/unauthorized");
+      return;
+    }
     axiosInstance
-      .get<Role>(`/roles/${id}`)
+      .get<Role>(`/roles/${decryptedId}`)
       .then((response) => {
         setRole(response.data);
       })
@@ -33,7 +41,7 @@ const EditForm: React.FC = () => {
       .finally(() => {
         setIsLoading(false); // Stop loading
       });
-  }, [id]);
+  }, [id, router]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,

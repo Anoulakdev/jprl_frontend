@@ -11,6 +11,7 @@ import {
   BellAlertIcon,
   Square3Stack3DIcon,
 } from "@heroicons/react/24/solid";
+import { encryptId } from "@/lib/cryptoId";
 
 interface Activity {
   id: number;
@@ -41,7 +42,8 @@ const ActList: React.FC = () => {
 
   const handleAdd = (id: number) => {
     // router.push(`/activity/user/detail/add/${id}`);
-    window.location.href = `/activity/user/detail/add/${id}`;
+    const encryptedId = encryptId(id);
+    window.location.href = `/activity/user/detail/add/${encryptedId}`;
   };
 
   const today = moment().format("YYYY-MM-DD");

@@ -11,6 +11,7 @@ import {
   TrashIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
+import { encryptId } from "@/lib/cryptoId";
 
 interface User {
   id: number;
@@ -94,7 +95,8 @@ const UserList: React.FC = () => {
   }, []);
 
   const handleEdit = (id: number) => {
-    router.push(`/user/user/edit/${id}`);
+    const encryptedId = encryptId(id);
+    router.push(`/user/user/edit/${encryptedId}`);
   };
 
   const handleDeleteClick = (id: number) => {

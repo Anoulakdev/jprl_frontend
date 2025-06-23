@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
 import { PrinterIcon } from "@heroicons/react/24/outline";
+import { decryptId } from "@/lib/cryptoId";
 
 interface User {
   id: number;
@@ -79,7 +80,18 @@ const ProfileView = () => {
 
       try {
         setIsLoading(true);
-        const response = await axiosInstance.get(`/users/profileview/${code}`);
+
+        let decryptedId: string;
+        try {
+          decryptedId = decryptId(decodeURIComponent(code as string));
+        } catch (err) {
+          router.replace("/unauthorized");
+          return;
+        }
+
+        const response = await axiosInstance.get(
+          `/users/profileview/${decryptedId}`,
+        );
         const u = response.data;
 
         setUser({
@@ -150,7 +162,7 @@ const ProfileView = () => {
     };
 
     fetchData();
-  }, [code]);
+  }, [code, router]);
 
   const calculateAge = (datebirth: string) => {
     const birthDate = new Date(datebirth);

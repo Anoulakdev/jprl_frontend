@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import DataTable from "react-data-table-component";
 import moment from "moment";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { encryptId } from "@/lib/cryptoId";
 
 interface DetailAct {
   id: number;
@@ -54,7 +55,8 @@ const ActList: React.FC = () => {
   }, []);
 
   const handleEdit = (id: number) => {
-    router.push(`/activity/user/detail/edit/${id}`);
+    const encryptedId = encryptId(id);
+    router.push(`/activity/user/detail/edit/${encryptedId}`);
   };
 
   const handleDeleteClick = (id: number) => {
