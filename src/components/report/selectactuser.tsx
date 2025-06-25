@@ -1,13 +1,14 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useEffect } from "react";
 import axiosInstance from "@/utils/axiosInstance";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { UserIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { encryptId } from "@/lib/cryptoId";
 
 interface User {
   code: string;
@@ -116,15 +117,15 @@ const Report: React.FC = () => {
   };
 
   const handleMap = (id: number) => {
-    window.open(`/map/mapone/${id}`, "_blank");
+    window.open(`/map/mapone/${encryptId(id)}`, "_blank");
   };
 
   const handleMapAll = (id: number) => {
-    window.open(`/map/mapall/${id}`, "_blank");
+    window.open(`/map/mapall/${encryptId(id)}`, "_blank");
   };
 
   const handleProfile = (code: string) => {
-    router.push(`/profile/view/${code}`);
+    router.push(`/profile/view/${encryptId(code)}`);
   };
 
   const exportToExcel = () => {
@@ -285,9 +286,11 @@ const Report: React.FC = () => {
                       </p>
                     </td>
                     <td className="border-b border-[#eee] px-2 py-2 dark:border-dark-3">
-                      <img
+                      <Image
                         className="h-16 w-24 rounded-lg border object-cover shadow-md"
                         src={`${process.env.NEXT_PUBLIC_API_URL}/upload/activity/${item.actimg}`}
+                        width={500}
+                        height={500}
                         alt={item.actimg}
                       />
                     </td>

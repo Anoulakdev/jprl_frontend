@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "react-toastify";
 import L from "leaflet"; // นำเข้า Leaflet สำหรับสร้าง Icon
 import "leaflet/dist/leaflet.css";
+import { decryptId } from "@/lib/cryptoId";
 
 interface Location {
   id: number;
@@ -33,6 +34,7 @@ const customIcon = new L.Icon({
 });
 
 export default function MapComponent() {
+  const router = useRouter();
   const { id } = useParams();
   const [location, setLocation] = useState<Location | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -40,8 +42,15 @@ export default function MapComponent() {
   useEffect(() => {
     if (id) {
       setIsLoading(true);
+      let decryptedId: string;
+      try {
+        decryptedId = decryptId(decodeURIComponent(id as string));
+      } catch (err) {
+        router.replace("/unauthorized");
+        return;
+      }
       axiosInstance
-        .get<Location>(`/detailacts/${id}`)
+        .get<Location>(`/detailacts/${decryptedId}`)
         .then((response) => {
           setLocation(response.data);
         })
@@ -53,7 +62,7 @@ export default function MapComponent() {
           setIsLoading(false);
         });
     }
-  }, [id]);
+  }, [id, router]);
 
   if (isLoading) return <p>Loading map...</p>;
   if (!location) return <p>No location data found</p>;

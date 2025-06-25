@@ -8,6 +8,7 @@ import { UserIcon, ArrowDownCircleIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { encryptId } from "@/lib/cryptoId";
 
 interface User {
   id: number;
@@ -148,7 +149,7 @@ const Report: React.FC = () => {
   };
 
   const handleProfile = (code: string) => {
-    router.push(`/profile/view/${code}`);
+    router.push(`/profile/view/${encryptId(code)}`);
   };
 
   const calculateAge = (datebirth: string) => {

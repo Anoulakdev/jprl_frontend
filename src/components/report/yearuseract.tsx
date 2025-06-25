@@ -6,7 +6,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-// กำหนดประเภทของข้อมูลที่ได้จาก API
+import Image from "next/image";
 interface ReportItem {
   name: string;
   content: string;
@@ -85,10 +85,7 @@ const Report: React.FC = () => {
       const data = new Blob([excelBuffer], {
         type: "application/octet-stream",
       });
-      saveAs(
-        data,
-        `ສັງ​ລວມຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ​ປີ${selectedYear}.xlsx`,
-      );
+      saveAs(data, `ສັງ​ລວມຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ​ປີ${selectedYear}.xlsx`);
     }
   };
 
@@ -178,9 +175,11 @@ const Report: React.FC = () => {
                       </p>
                     </td>
                     <td className="border-b border-[#eee] px-2 py-2 dark:border-dark-3">
-                      <img
+                      <Image
                         className="h-16 w-24 rounded-lg border object-cover shadow-md"
                         src={`${process.env.NEXT_PUBLIC_API_URL}/upload/activity/${item.actimg}`}
+                        width={500}
+                        height={500}
                         alt={item.actimg}
                       />
                     </td>

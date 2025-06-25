@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import flatpickr from "flatpickr";
 import axiosInstance from "@/utils/axiosInstance";
+import Image from "next/image";
 import moment from "moment";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
@@ -220,9 +221,11 @@ const Report: React.FC = () => {
                       </p>
                     </td>
                     <td className="border-b border-[#eee] px-2 py-2 dark:border-dark-3">
-                      <img
+                      <Image
                         className="h-16 w-24 rounded-lg border object-cover shadow-md"
                         src={`${process.env.NEXT_PUBLIC_API_URL}/upload/activity/${item.actimg}`}
+                        width={500}
+                        height={500}
                         alt={item.actimg}
                       />
                     </td>

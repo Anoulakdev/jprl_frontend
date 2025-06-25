@@ -6,6 +6,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
+import Image from "next/image";
 
 interface User {
   code: string;
@@ -202,9 +203,11 @@ const Report: React.FC = () => {
               key={index}
               className="relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
             >
-              <img
+              <Image
                 className="h-35 w-full object-cover sm:h-40 md:h-35 lg:h-30 xl:h-40"
                 src={`${process.env.NEXT_PUBLIC_API_URL}/upload/activity/${item.actimg}`}
+                width={500}
+                height={500}
                 alt={item.actimg}
               />
             </div>

@@ -142,10 +142,11 @@ const ActList: React.FC = () => {
     {
       name: "ຮູບ​ພາບ",
       cell: (row: DetailAct) => (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           className="h-16 w-24 rounded-lg border object-cover shadow-md"
           src={`${process.env.NEXT_PUBLIC_API_URL}/upload/activity/${row.actimg}`}
+          width={500}
+          height={500}
           alt={row.actimg}
         />
       ),

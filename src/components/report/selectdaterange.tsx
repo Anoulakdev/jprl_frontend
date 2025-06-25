@@ -10,6 +10,7 @@ import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { encryptId } from "@/lib/cryptoId";
 
 interface ReportItem {
   code: string;
@@ -106,7 +107,7 @@ const Report: React.FC = () => {
   };
 
   const handleProfile = (code: string) => {
-    router.push(`/profile/view/${code}`);
+    router.push(`/profile/view/${encryptId(code)}`);
   };
 
   const exportToExcel = () => {

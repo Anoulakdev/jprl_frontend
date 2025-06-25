@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "react-toastify";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { decryptId } from "@/lib/cryptoId";
 
 interface User {
   gender: string;
@@ -26,6 +27,7 @@ interface Location {
 }
 
 export default function MapComponent() {
+  const router = useRouter();
   const { id } = useParams();
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -40,8 +42,15 @@ export default function MapComponent() {
   useEffect(() => {
     if (id) {
       setIsLoading(true);
+      let decryptedId: string;
+      try {
+        decryptedId = decryptId(decodeURIComponent(id as string));
+      } catch (err) {
+        router.replace("/unauthorized");
+        return;
+      }
       axiosInstance
-        .get<{ detailacts: Location[] }>(`/activitys/${id}`)
+        .get<{ detailacts: Location[] }>(`/activitys/${decryptedId}`)
         .then((response) => {
           setLocations(response.data.detailacts);
         })
@@ -52,7 +61,7 @@ export default function MapComponent() {
           setIsLoading(false);
         });
     }
-  }, [id]);
+  }, [id, router]);
 
   if (isLoading) return <p>Loading map...</p>;
   if (locations.length === 0) return <p>No location data found</p>;
