@@ -239,14 +239,15 @@ const AddForm = () => {
           <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
-                ເບີ​ໂທ <span className="text-red"></span>
+                ເບີ​ໂທ(20xxxxxxxx) <span className="text-red"></span>
               </label>
               <input
                 type="text"
                 name="tel"
                 value={formData.tel}
                 onChange={handleChange}
-                placeholder="ເບີ​ໂທ"
+                placeholder="(20xxxxxxxx)"
+                maxLength={10}
                 className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
               />
             </div>
