@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import axiosInstance from "@/utils/axiosInstance";
@@ -67,8 +67,8 @@ interface Chu {
 
 const UserList: React.FC = () => {
   const [data, setData] = useState<User[]>([]);
-  const [filteredData, setFilteredData] = useState<User[]>([]);
   const [filterText, setFilterText] = useState<string>("");
+  const [debouncedFilter, setDebouncedFilter] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
@@ -77,12 +77,18 @@ const UserList: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedFilter(filterText.toLowerCase());
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [filterText]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await axiosInstance.get(`/users/admin`);
         setData(response.data);
-        setFilteredData(response.data); // Initialize filtered data with fetched data
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -112,7 +118,6 @@ const UserList: React.FC = () => {
         await axiosInstance.delete(`/users/${userToDelete.id}`);
         const deletedData = data.filter((u) => u.id !== userToDelete.id);
         setData(deletedData);
-        setFilteredData(deletedData);
         toast.success("ລົ​ບ​ຂໍ້ມູນ​ສຳ​ເລັດ​ແລ້ວ");
       } catch (error) {
         toast.error("ລົ​ບ​ຂໍ້ມູນ​ບໍ່ສຳ​ເລັດ");
@@ -136,7 +141,6 @@ const UserList: React.FC = () => {
         );
 
         setData(updatedData);
-        setFilteredData(updatedData);
 
         toast.success("ຣີເສັດລະ​ຫັດ​ສຳ​ເລັດ​ແລ້ວ");
       } catch (error) {
@@ -147,22 +151,7 @@ const UserList: React.FC = () => {
   };
 
   const handleFilter = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.toLowerCase();
-    setFilterText(value);
-
-    // Filter data based on the input value
-    const filtered = data.filter(
-      (user) =>
-        user.code.toLowerCase().includes(value) ||
-        user.firstname.toLowerCase().includes(value) ||
-        user.lastname.toLowerCase().includes(value) ||
-        user.gender.toLowerCase().includes(value) ||
-        user.tel.toLowerCase().includes(value) ||
-        user.position.name.toLowerCase().includes(value) ||
-        user.unit.name.toLowerCase().includes(value) ||
-        user.chu.name.toLowerCase().includes(value),
-    );
-    setFilteredData(filtered);
+    setFilterText(event.target.value);
   };
 
   const handlePageChange = (page: number) => {
@@ -190,7 +179,6 @@ const UserList: React.FC = () => {
         // Re-fetch the user data to reflect the updated status
         const updatedData = await axiosInstance.get(`/users/admin`);
         setData(updatedData.data); // Update the data in the state
-        setFilteredData(updatedData.data); // Also update the filtered data
       }
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการอัปเดตสถานะ:", error);
@@ -199,6 +187,23 @@ const UserList: React.FC = () => {
       setLoading(false);
     }
   };
+
+  // ✅ filter data with useMemo
+  const filteredData = useMemo(() => {
+    if (!debouncedFilter) return data;
+
+    return data.filter((user) => {
+      const code = user.code?.toLowerCase() || "";
+      const firstname = user.firstname?.toLowerCase() || "";
+      const tel = user.tel?.toLowerCase() || "";
+
+      return (
+        code.includes(debouncedFilter) ||
+        firstname.includes(debouncedFilter) ||
+        tel.includes(debouncedFilter)
+      );
+    });
+  }, [data, debouncedFilter]);
 
   const columns = [
     {
