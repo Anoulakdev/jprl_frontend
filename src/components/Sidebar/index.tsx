@@ -11,10 +11,10 @@ import {
   HomeIcon,
   UserIcon,
   CalendarDaysIcon,
-  ClockIcon,
   ClipboardDocumentListIcon,
   ChevronDoubleLeftIcon,
   BellIcon,
+  UserGroupIcon,
 } from "@heroicons/react/24/outline";
 
 interface SidebarProps {
@@ -88,6 +88,16 @@ const adminMenuGroups = [
         route: "/activity/admin",
       },
       {
+        icon: <UserGroupIcon className="h-6 w-6" />,
+        label: "ປະ​ຊຸມ",
+        route: "/meeting/admin",
+      },
+      {
+        icon: <UserIcon className="h-6 w-6" />,
+        label: "ອະ​ນຸ​ມັດເຂົ້າ​ຮ່ວມ​ປະ​ຊຸມ",
+        route: "/approved/meeting",
+      },
+      {
         icon: <UserIcon className="h-6 w-6" />,
         label: "ໜ່ວຍ",
         route: "/unit",
@@ -103,34 +113,56 @@ const adminMenuGroups = [
     name: "ລາຍ​ງານ",
     menuItems: [
       {
-        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
-        label: "ສັງ​ລວມຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
-        route: "/report/selectactuser",
+        icon: <CalendarDaysIcon className="h-6 w-6" />,
+        label: "ກິດ​ຈ​ະ​ກຳ",
+        children: [
+          {
+            label: "ສັງ​ລວມຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
+            route: "/report/selectactuser",
+          },
+          {
+            label: "ຮູບ​ພາບຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
+            route: "/report/selectactimg",
+          },
+          {
+            label: "ສັງ​ລວມຈຳ​ນວນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳເປັນ​ປີ",
+            route: "/report/selectyearuser",
+          },
+          {
+            label: "ສັງ​ລວມຈຳ​ນວນ​​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ​ຕາມ​ ​ວ/ດ/ປ",
+            route: "/report/selectdaterange",
+          },
+          {
+            label: "ການ​ເຂົ້າ​ຮ່ວມ​ກິ​ດ​ຈະ​ກຳ​ຂອງ​ພ​ະ​ນັກ​ງານ",
+            route: "/report/useractall",
+          },
+          {
+            label: "ສັງ​ລວມ​ຈຳ​ນວນ​ສະ​ມາ​ຊິກ",
+            route: "/report/userall",
+          },
+        ],
       },
       {
-        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
-        label: "ຮູບ​ພາບຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
-        route: "/report/selectactimg",
-      },
-      {
-        icon: <ClipboardDocumentListIcon className="h-8 w-8" />,
-        label: "ສັງ​ລວມຈຳ​ນວນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳເປັນ​ປີ",
-        route: "/report/selectyearuser",
-      },
-      {
-        icon: <ClipboardDocumentListIcon className="h-9 w-9" />,
-        label: "ສັງ​ລວມຈຳ​ນວນ​​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ​ຕາມ​ ​ວ/ດ/ປ",
-        route: "/report/selectdaterange",
-      },
-      {
-        icon: <ClipboardDocumentListIcon className="h-7 w-7" />,
-        label: "ການ​ເຂົ້າ​ຮ່ວມ​ກິ​ດ​ຈະ​ກຳ​ຂອງ​ພ​ະ​ນັກ​ງານ",
-        route: "/report/useractall",
-      },
-      {
-        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
-        label: "ສັງ​ລວມ​ຈຳ​ນວນ​ສະ​ມາ​ຊິກ",
-        route: "/report/userall",
+        icon: <UserGroupIcon className="h-6 w-6" />,
+        label: "ປະ​ຊຸມ",
+        children: [
+          {
+            label: "ສັງ​ລວມຄົນ​ເຂົ້າ​ຮ່ວມ​ປະ​ຊຸມ",
+            route: "/report/selectmeetuser",
+          },
+          {
+            label: "ຮູບ​ພາບຄົນ​ເຂົ້າ​ຮ່ວມ​ປະ​ຊຸມ",
+            route: "/report/selectmeetimg",
+          },
+          {
+            label: "ສັງ​ລວມຈຳ​ນວນ​ເຂົ້າ​ຮ່ວມ​ປະ​ຊຸມເປັນ​ປີ",
+            route: "/report/selectmeetyearuser",
+          },
+          {
+            label: "ສັງ​ລວມຈຳ​ນວນ​​ເຂົ້າ​ຮ່ວມ​ປະ​ຊຸມ​ຕາມ​ ​ວ/ດ/ປ",
+            route: "/report/selectmeetdaterange",
+          },
+        ],
       },
     ],
   },
@@ -156,9 +188,9 @@ const userBossMenuGroups = [
         route: "/activity/user",
       },
       {
-        icon: <ClockIcon className="h-6 w-6" />,
-        label: "ປະ​ຫວັດກິດ​ຈ​ະ​ກຳ",
-        route: "/activity/user/detail",
+        icon: <UserGroupIcon className="h-6 w-6" />,
+        label: "ປະ​ຊຸມ",
+        route: "/meeting/user",
       },
     ],
   },
@@ -172,6 +204,11 @@ const userBossMenuGroups = [
       },
       {
         icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
+        label: "​ການ​ເຂົ້າ​ຮ່ວມ​ປະ​ຊຸມ",
+        route: "/report/yearusermeet",
+      },
+      {
+        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
         label: "ສັງ​ລວມຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
         route: "/report/selectactuser",
       },
@@ -181,12 +218,12 @@ const userBossMenuGroups = [
         route: "/report/selectactimg",
       },
       {
-        icon: <ClipboardDocumentListIcon className="h-8 w-8" />,
+        icon: <ClipboardDocumentListIcon className="h-7 w-7" />,
         label: "ສັງ​ລວມຈຳ​ນວນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳເປັນ​ປີ",
         route: "/report/selectyearuser",
       },
       {
-        icon: <ClipboardDocumentListIcon className="h-9 w-9" />,
+        icon: <ClipboardDocumentListIcon className="h-8 w-8" />,
         label: "ສັງ​ລວມຈຳ​ນວນ​​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ​ຕາມ​ ​ວ/ດ/ປ",
         route: "/report/selectdaterange",
       },
@@ -219,14 +256,19 @@ const userUnitMenuGroups = [
         route: "/user/user",
       },
       {
+        icon: <UserIcon className="h-6 w-6" />,
+        label: "ອະ​ນຸ​ມັດເຂົ້າ​ຮ່ວມ​ກິດຈະ​ກຳ​",
+        route: "/approved/activity",
+      },
+      {
         icon: <CalendarDaysIcon className="h-6 w-6" />,
         label: "ກິດ​ຈ​ະ​ກຳ",
         route: "/activity/user",
       },
       {
-        icon: <ClockIcon className="h-6 w-6" />,
-        label: "ປະ​ຫວັດກິດ​ຈ​ະ​ກຳ",
-        route: "/activity/user/detail",
+        icon: <UserGroupIcon className="h-6 w-6" />,
+        label: "ປະ​ຊຸມ",
+        route: "/meeting/user",
       },
     ],
   },
@@ -237,6 +279,11 @@ const userUnitMenuGroups = [
         icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
         label: "​ການ​ເຂົ້າ​ຮ່ວມ​ກິ​ດ​ຈ​ະ​ກຳ",
         route: "/report/yearuseract",
+      },
+      {
+        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
+        label: "​ການ​ເຂົ້າ​ຮ່ວມ​ປະ​ຊຸມ",
+        route: "/report/yearusermeet",
       },
     ],
   },
@@ -262,9 +309,9 @@ const userMemberMenuGroups = [
         route: "/activity/user",
       },
       {
-        icon: <ClockIcon className="h-6 w-6" />,
-        label: "ປະ​ຫວັດກິດ​ຈ​ະ​ກຳ",
-        route: "/activity/user/detail",
+        icon: <UserGroupIcon className="h-6 w-6" />,
+        label: "ປະ​ຊຸມ",
+        route: "/meeting/user",
       },
     ],
   },
@@ -275,6 +322,11 @@ const userMemberMenuGroups = [
         icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
         label: "​ການ​ເຂົ້າ​ຮ່ວມ​ກິ​ດ​ຈ​ະ​ກຳ",
         route: "/report/yearuseract",
+      },
+      {
+        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
+        label: "​ການ​ເຂົ້າ​ຮ່ວມ​ປະ​ຊຸມ",
+        route: "/report/yearusermeet",
       },
     ],
   },

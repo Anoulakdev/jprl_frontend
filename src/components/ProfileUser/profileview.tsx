@@ -38,6 +38,10 @@ interface User {
   phakbook: string;
   latcomein: string;
   latposition: string;
+  latdepartment: string;
+  latdivision: string;
+  latoffice: string;
+  latunit: string;
   kammabancomein: string;
   kammabanposition: string;
   youthcomein: string;
@@ -134,6 +138,10 @@ const ProfileView = () => {
             ? moment(u.latcomein).format("DD/MM/YYYY")
             : "",
           latposition: u.latposition || "",
+          latdepartment: u.latdepartment || "",
+          latdivision: u.latdivision || "",
+          latoffice: u.latoffice || "",
+          latunit: u.latunit || "",
           kammabancomein: u.kammabancomein
             ? moment(u.kammabancomein).format("DD/MM/YYYY")
             : "",
@@ -350,6 +358,18 @@ const ProfileView = () => {
                 <p className="text-black dark:text-white">
                   ຕຳ​ແໜ່ງ​ລັດ: {user?.latposition}
                 </p>
+                <p className="text-black dark:text-white">
+                  ຝ່າຍ: {user?.latdepartment}
+                </p>
+                <p className="text-black dark:text-white">
+                  ພະ​ແນກ/ສາ​ຂາ: {user?.latdivision}
+                </p>
+                <p className="text-black dark:text-white">
+                  ​ຫ້ອງ​ການ: {user?.latoffice}
+                </p>
+                <p className="text-black dark:text-white">
+                  ​ໜ່ວຍ​ງານ: {user?.latunit}
+                </p>
 
                 <h5 className="mt-4 text-lg font-semibold text-black dark:text-white">
                   * ອົງ​ການ​ຈັດ​ຕັ້ງ​ມະ​ຫາ​ຊົນ
@@ -374,7 +394,10 @@ const ProfileView = () => {
                   ຕຳ​ແໜ່ງ​ຊາວ​ໜຸ່ມ: {user?.position?.name}
                 </p>
                 <p className="text-black dark:text-white">
-                  ໜ່ວຍ​ຊາວ​ໜຸ່ມ: ໜ່ວຍ{user?.unit?.no} {user?.unit?.name}
+                  ໜ່ວຍ​: ໜ່ວຍ{user?.unit?.no}
+                </p>
+                <p className="text-black dark:text-white">
+                  ຈຸ​: {user?.chu?.name}
                 </p>
 
                 <h5 className="mt-4 text-lg font-semibold text-black dark:text-white">

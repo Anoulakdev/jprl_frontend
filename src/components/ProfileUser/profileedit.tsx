@@ -252,38 +252,38 @@ const EditForm = () => {
       );
 
       // ใส่ค่าทุกช่องลงใน FormData
-      formData.append("firstname", user.firstname || "");
-      formData.append("lastname", user.lastname || "");
-      formData.append("gender", user.gender || "");
+      // formData.append("firstname", user.firstname || "");
+      // formData.append("lastname", user.lastname || "");
+      // formData.append("gender", user.gender || "");
       formData.append("tel", user.tel || "");
-      formData.append("datebirth", fdatebirth || "");
-      formData.append("tribe", user.tribe || "");
-      formData.append("religion", user.religion || "");
-      formData.append("villagebirth", user.villagebirth || "");
-      formData.append("districtbirth", user.districtbirth || "");
-      formData.append("provincebirth", user.provincebirth || "");
-      formData.append("villagenow", user.villagenow || "");
-      formData.append("districtnow", user.districtnow || "");
-      formData.append("provincenow", user.provincenow || "");
+      // formData.append("datebirth", fdatebirth || "");
+      // formData.append("tribe", user.tribe || "");
+      // formData.append("religion", user.religion || "");
+      // formData.append("villagebirth", user.villagebirth || "");
+      // formData.append("districtbirth", user.districtbirth || "");
+      // formData.append("provincebirth", user.provincebirth || "");
+      // formData.append("villagenow", user.villagenow || "");
+      // formData.append("districtnow", user.districtnow || "");
+      // formData.append("provincenow", user.provincenow || "");
       formData.append("edusaman", user.edusaman || "");
-      formData.append("edulevel", user.edulevel || "");
-      formData.append("edusubject", user.edusubject || "");
+      // formData.append("edulevel", user.edulevel || "");
+      // formData.append("edusubject", user.edusubject || "");
       formData.append("edutheory", user.edutheory || "");
       formData.append("phaksupport", fphaksupport || "");
       formData.append("phakrule", fphakrule || "");
-      formData.append("phaksamhong", fphaksamhong || "");
-      formData.append("phaksomboun", fphaksomboun || "");
-      formData.append("phakposition", user.phakposition || "");
+      // formData.append("phaksamhong", fphaksamhong || "");
+      // formData.append("phaksomboun", fphaksomboun || "");
+      // formData.append("phakposition", user.phakposition || "");
       formData.append("phakcard", user.phakcard || "");
       formData.append("phakissuedcard", fphakissuedcard || "");
       formData.append("phakbook", user.phakbook || "");
-      formData.append("latcomein", flatcomein || "");
-      formData.append("latposition", user.latposition || "");
-      formData.append("kammabancomein", fkammabancomein || "");
-      formData.append("kammabanposition", user.kammabanposition || "");
-      formData.append("youthcomein", fyouthcomein || "");
-      formData.append("womencomein", fwomencomein || "");
-      formData.append("womenposition", user.womenposition || "");
+      // formData.append("latcomein", flatcomein || "");
+      // formData.append("latposition", user.latposition || "");
+      // formData.append("kammabancomein", fkammabancomein || "");
+      // formData.append("kammabanposition", user.kammabanposition || "");
+      // formData.append("youthcomein", fyouthcomein || "");
+      // formData.append("womencomein", fwomencomein || "");
+      // formData.append("womenposition", user.womenposition || "");
 
       // Arrays: ต้องแปลงก่อน หรือวนลูปใส่เอง
       user.arts.forEach((item, index) =>
@@ -300,9 +300,9 @@ const EditForm = () => {
       );
 
       // รูปภาพ
-      if (uploadedImage) {
-        formData.append("userimg", uploadedImage);
-      }
+      // if (uploadedImage) {
+      //   formData.append("userimg", uploadedImage);
+      // }
 
       await axiosInstance.put(`/users/updateprofile/${user.id}`, formData, {
         headers: {
@@ -332,7 +332,7 @@ const EditForm = () => {
             * ຂໍ້​ມູ​ນ​ພື້ນ​ຖານ
           </h2>
           <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
-            <div className="w-full md:w-1/4 lg:w-1/4">
+            {/* <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ເພດ <span className="text-red">*</span>
               </label>
@@ -362,9 +362,9 @@ const EditForm = () => {
                   <span className="text-dark dark:text-white">​ຍິງ</span>
                 </label>
               </div>
-            </div>
+            </div> */}
 
-            <div className="w-full md:w-1/4 lg:w-1/4">
+            {/* <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ຊື່ <span className="text-red">*</span>
               </label>
@@ -377,9 +377,9 @@ const EditForm = () => {
                 className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
                 required
               />
-            </div>
+            </div> */}
 
-            <div className="w-full md:w-1/4 lg:w-1/4">
+            {/* <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ນາມ​ສະ​ກຸນ <span className="text-red">*</span>
               </label>
@@ -392,7 +392,7 @@ const EditForm = () => {
                 className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
                 required
               />
-            </div>
+            </div> */}
 
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
@@ -410,7 +410,7 @@ const EditForm = () => {
             </div>
           </div>
 
-          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
+          {/* <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ວັນ​ເດືອນ​ປີ​ເກີດ <span className="text-red"></span>
@@ -469,9 +469,9 @@ const EditForm = () => {
                 className="w-full cursor-pointer rounded-[7px] border-[1.5px] border-stroke px-3 py-[9px] text-black outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-stroke file:px-2.5 file:py-1 file:text-body-xs file:font-medium file:text-dark-5 focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-dark dark:border-dark-3 dark:bg-dark-2 dark:file:border-dark-3 dark:file:bg-white/30 dark:file:text-white"
               />
             </div>
-          </div>
+          </div> */}
 
-          <h2 className="pb-1 pt-2 text-2xl font-bold text-gray-800">
+          {/* <h2 className="pb-1 pt-2 text-2xl font-bold text-gray-800">
             * ທີ່​ຢູ່​ເກີດ
           </h2>
           <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
@@ -514,9 +514,9 @@ const EditForm = () => {
                 className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
               />
             </div>
-          </div>
+          </div> */}
 
-          <h2 className="pb-1 pt-2 text-2xl font-bold text-gray-800">
+          {/* <h2 className="pb-1 pt-2 text-2xl font-bold text-gray-800">
             * ທີ່​ຢູ່​ປະ​ຈຸ​ບັນ
           </h2>
           <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
@@ -559,7 +559,7 @@ const EditForm = () => {
                 className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
               />
             </div>
-          </div>
+          </div> */}
 
           <h2 className="pb-1 pt-2 text-2xl font-bold text-gray-800">
             * ລະ​ດັບ​ການ​ສຶກ​ສາ
@@ -578,7 +578,7 @@ const EditForm = () => {
                 className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
               />
             </div>
-            <div className="w-full md:w-1/4 lg:w-1/4">
+            {/* <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ຊັ້ນ <span className="text-red"></span>
               </label>
@@ -603,7 +603,7 @@ const EditForm = () => {
                 placeholder="ສາ​ຂາ​ວິ​ສາ​ສະ​ເພາະ"
                 className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
               />
-            </div>
+            </div> */}
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ທິດ​ສະ​ດີ <span className="text-red"></span>
@@ -661,7 +661,7 @@ const EditForm = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full md:w-1/4 lg:w-1/4">
+            {/* <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ວ/ດ/ປ ເຂົ້າ​ສຳ​ຮອງ <span className="text-red"></span>
               </label>
@@ -700,23 +700,7 @@ const EditForm = () => {
                   <ArrowDownCircleIcon className="mt-3 h-6 w-6 md:mt-3 lg:mt-1" />
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
-            <div className="w-full md:w-1/4 lg:w-1/4">
-              <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
-                ຕຳ​ແໜ່ງ​ພັກ <span className="text-red"></span>
-              </label>
-              <input
-                type="text"
-                name="phakposition"
-                value={user?.phakposition || ""}
-                onChange={handleChange}
-                placeholder="ຕຳ​ແໜ່ງ​ພັກ"
-                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-              />
-            </div>
+            </div> */}
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ລະ​ຫັດ​ບັດ​ສະ​ມາ​ຊິກ​ພັກ <span className="text-red"></span>
@@ -750,6 +734,23 @@ const EditForm = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
+            {/* <div className="w-full md:w-1/4 lg:w-1/4">
+              <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
+                ຕຳ​ແໜ່ງ​ພັກ <span className="text-red"></span>
+              </label>
+              <input
+                type="text"
+                name="phakposition"
+                value={user?.phakposition || ""}
+                onChange={handleChange}
+                placeholder="ຕຳ​ແໜ່ງ​ພັກ"
+                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+              />
+            </div> */}
+
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ປີ​ຂຽນ​ປຶ​້ມ​ປະ​ຫວັດ​ພັກ <span className="text-red"></span>
@@ -765,7 +766,7 @@ const EditForm = () => {
             </div>
           </div>
 
-          <h2 className="pb-1 pt-2 text-2xl font-bold text-gray-800">
+          {/* <h2 className="pb-1 pt-2 text-2xl font-bold text-gray-800">
             * ເຂົ້າ​ການ​ປະ​ຕິ​ວັດ
           </h2>
           <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
@@ -802,9 +803,9 @@ const EditForm = () => {
                 className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
               />
             </div>
-          </div>
+          </div> */}
 
-          <h2 className="pb-1 pt-2 text-2xl font-bold text-gray-800">
+          {/* <h2 className="pb-1 pt-2 text-2xl font-bold text-gray-800">
             * ອົງ​ການ​ຈັດ​ຕັ້ງ​ມະ​ຫາ​ຊົນ
           </h2>
           <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
@@ -897,7 +898,7 @@ const EditForm = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <h2 className="pb-1 pt-2 text-2xl font-bold text-gray-800">
             * ກິດ​ຈ​ະ​ກຳເສີມ (ປະ​ເພດ​ສິນ​ລະ​ປະ)

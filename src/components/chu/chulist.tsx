@@ -11,6 +11,7 @@ import { encryptId } from "@/lib/cryptoId";
 
 interface Chu {
   id: number;
+  code: string;
   name: string;
   unit: Unit;
 }
@@ -114,10 +115,16 @@ const ChuList: React.FC = () => {
       width: "30%",
     },
     {
+      name: "ລະ​ຫັດຈຸ​ງານ",
+      selector: (row: Chu) => row.code,
+      sortable: true,
+      width: "20%",
+    },
+    {
       name: "ຊື່​ຈຸ​ງານ",
       selector: (row: Chu) => row.name,
       sortable: true,
-      width: "40%",
+      width: "25%",
     },
     {
       name: "#",
@@ -144,6 +151,7 @@ const ChuList: React.FC = () => {
   const customStyles = {
     headCells: {
       style: {
+        backgroundColor: "#d9e0e9",
         fontWeight: "bold",
         fontSize: "16px",
         width: "200px",

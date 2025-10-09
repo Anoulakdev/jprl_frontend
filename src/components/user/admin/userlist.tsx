@@ -30,7 +30,7 @@ interface User {
   position: Position;
   unit: Unit;
   chu: Chu;
-  detailacts?: DetailAct[];
+  DetailActUser?: DetailAct[];
 }
 
 interface DetailAct {
@@ -352,7 +352,7 @@ const UserList: React.FC = () => {
           </button>
           <button
             onClick={() => handleDeleteClick(row.id)}
-            disabled={row.detailacts && row.detailacts.length > 0}
+            disabled={row.DetailActUser && row.DetailActUser.length > 0}
             className="inline-flex items-center gap-x-2 rounded-lg border border-red-500 px-2 py-2 text-xs font-medium text-red-500 hover:border-red-400 hover:text-red-400 focus:border-red-400 focus:text-red-400 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
           >
             <TrashIcon className="h-4 w-4" />
@@ -366,6 +366,7 @@ const UserList: React.FC = () => {
   const customStyles = {
     headCells: {
       style: {
+        backgroundColor: "#d9e0e9",
         fontWeight: "bold",
         fontSize: "16px",
         width: "130px",

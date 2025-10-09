@@ -49,7 +49,7 @@ const ActList: React.FC = () => {
   const today = moment().format("YYYY-MM-DD");
 
   return (
-    <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
+    <div className="dark:border-dark-3 dark:bg-gray-dark dark:shadow-card">
       <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-gray-800 dark:text-white">
         <CalendarDaysIcon className="h-6 w-6 text-blue-600" />
         ກິດ​ຈ​ະ​ກຳປະ​ຈຳ​ມື້ນີ້

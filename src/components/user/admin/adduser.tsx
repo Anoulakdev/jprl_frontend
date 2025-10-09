@@ -3,12 +3,8 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "@/utils/axiosInstance";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import axios from "axios";
 
-interface Role {
-  id: number;
-  name: string;
-  description: string;
-}
 interface Position {
   id: number;
   name: string;
@@ -38,11 +34,11 @@ const AddForm = () => {
     userimg: "",
   });
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-  const [roless, setRoless] = useState<Role[]>([]);
   const [positionss, setPositionss] = useState<Position[]>([]);
   const [unitss, setUnitss] = useState<Unit[]>([]);
   const [chuss, setChuss] = useState<Chu[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -94,6 +90,46 @@ const AddForm = () => {
     fetchChus();
   }, [formData.unitId]);
 
+  // ค้นหาพนักงานอัตโนมัติจาก code
+  useEffect(() => {
+    if (!formData.code.trim()) return;
+
+    const delayDebounce = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get(`/api/employees/${formData.code}`);
+        const employee = res.data.employees?.[0];
+
+        if (employee) {
+          setFormData((prev) => ({
+            ...prev,
+            firstname: employee.first_name_la || "",
+            lastname: employee.last_name_la || "",
+          }));
+        } else {
+          // ❌ ไม่เจอ employee -> clear ค่า
+          setFormData((prev) => ({
+            ...prev,
+            firstname: "",
+            lastname: "",
+          }));
+        }
+      } catch (error: any) {
+        console.error("Error fetching employees:", error.message);
+        // ❌ error ก็ clear ค่าเช่นกัน
+        setFormData((prev) => ({
+          ...prev,
+          firstname: "",
+          lastname: "",
+        }));
+      } finally {
+        setLoading(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [formData.code]);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -118,9 +154,9 @@ const AddForm = () => {
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("code", formData.code);
-      formDataToSend.append("firstname", formData.firstname);
-      formDataToSend.append("lastname", formData.lastname);
-      formDataToSend.append("gender", formData.gender);
+      // formDataToSend.append("firstname", formData.firstname);
+      // formDataToSend.append("lastname", formData.lastname);
+      // formDataToSend.append("gender", formData.gender);
       formDataToSend.append("tel", formData.tel);
       formDataToSend.append("roleId", String(formData.roleId));
       formDataToSend.append("positionId", String(formData.positionId));
@@ -154,7 +190,7 @@ const AddForm = () => {
       <form onSubmit={handleSubmit}>
         <div className="p-6.5">
           <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
-            <div className="w-full md:w-1/4 lg:w-1/4">
+            {/* <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ເພດ <span className="text-red">*</span>
               </label>
@@ -184,7 +220,7 @@ const AddForm = () => {
                   <span className="text-dark dark:text-white">​ຍິງ</span>
                 </label>
               </div>
-            </div>
+            </div> */}
 
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
@@ -211,8 +247,8 @@ const AddForm = () => {
                 value={formData.firstname}
                 onChange={handleChange}
                 placeholder="ຊື່"
-                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-                required
+                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-gray-100 px-5.5 py-3  text-gray-500 outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-gray-400"
+                readOnly
               />
             </div>
 
@@ -226,13 +262,11 @@ const AddForm = () => {
                 value={formData.lastname}
                 onChange={handleChange}
                 placeholder="ນາມ​ສະ​ກຸນ"
-                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-                required
+                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-gray-100 px-5.5 py-3  text-gray-500 outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-gray-400"
+                readOnly
               />
             </div>
-          </div>
 
-          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ເບີ​ໂທ(20xxxxxxxx) <span className="text-red"></span>
@@ -247,7 +281,9 @@ const AddForm = () => {
                 className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
               />
             </div>
+          </div>
 
+          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ຕຳ​ແໜ່ງ <span className="text-red">*</span>
@@ -363,9 +399,6 @@ const AddForm = () => {
                 </span>
               </div>
             </div>
-          </div>
-
-          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
                 ຮູບ​ພາບ
@@ -379,6 +412,21 @@ const AddForm = () => {
               />
             </div>
           </div>
+
+          {/* <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
+            <div className="w-full md:w-1/4 lg:w-1/4">
+              <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
+                ຮູບ​ພາບ
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                name="userimg"
+                onChange={handleFileChange}
+                className="w-full cursor-pointer rounded-[7px] border-[1.5px] border-stroke px-3 py-[9px] text-black outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-stroke file:px-2.5 file:py-1 file:text-body-xs file:font-medium file:text-dark-5 focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-dark dark:border-dark-3 dark:bg-dark-2 dark:file:border-dark-3 dark:file:bg-white/30 dark:file:text-white"
+              />
+            </div>
+          </div> */}
 
           {/* Submit Button */}
           <div className="mt-6 flex justify-center">

@@ -50,9 +50,7 @@ const EditForm = () => {
   const { id } = useParams(); // Get the user ID from the query
   const [user, setUser] = useState<User | null>(null);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null); // Stores the image name for display
-  const [roless, setRoless] = useState<Role[]>([]);
   const [positionss, setPositionss] = useState<Position[]>([]);
-  const [unitss, setUnitss] = useState<Unit[]>([]);
   const [chuss, setChuss] = useState<Chu[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -140,9 +138,9 @@ const EditForm = () => {
     try {
       setIsLoading(true);
       const formData = new FormData();
-      formData.append("firstname", user.firstname);
-      formData.append("lastname", user.lastname);
-      formData.append("gender", user.gender);
+      // formData.append("firstname", user.firstname);
+      // formData.append("lastname", user.lastname);
+      // formData.append("gender", user.gender);
       formData.append("tel", user.tel || "");
       formData.append("roleId", String(user.roleId));
       formData.append("positionId", String(user.positionId));
@@ -176,7 +174,7 @@ const EditForm = () => {
       <form onSubmit={handleSubmit}>
         <div className="p-6.5">
           <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
-            <div className="w-full md:w-1/4 lg:w-1/4">
+            {/* <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ເພດ <span className="text-red">*</span>
               </label>
@@ -206,7 +204,7 @@ const EditForm = () => {
                   <span className="text-dark dark:text-white">​ຍິງ</span>
                 </label>
               </div>
-            </div>
+            </div> */}
 
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
@@ -218,8 +216,8 @@ const EditForm = () => {
                 value={user?.firstname || ""}
                 onChange={handleChange}
                 placeholder="ຊື່"
-                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-                required
+                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-gray-100 px-5.5 py-3  text-gray-500 outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-gray-400"
+                readOnly
               />
             </div>
 
@@ -233,8 +231,8 @@ const EditForm = () => {
                 value={user?.lastname || ""}
                 onChange={handleChange}
                 placeholder="ນາມ​ສະ​ກຸນ"
-                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-                required
+                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-gray-100 px-5.5 py-3  text-gray-500 outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-gray-400"
+                readOnly
               />
             </div>
 
@@ -252,9 +250,6 @@ const EditForm = () => {
                 className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
               />
             </div>
-          </div>
-
-          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ຕຳ​ແໜ່ງ <span className="text-red">*</span>
@@ -293,7 +288,9 @@ const EditForm = () => {
                 </span>
               </div>
             </div>
+          </div>
 
+          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ຈຸ <span className="text-red">*</span>

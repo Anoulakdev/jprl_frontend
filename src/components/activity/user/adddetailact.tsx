@@ -148,7 +148,7 @@ const AddForm = () => {
       });
 
       toast.success("ເພີ່ມ​ຂໍ້​ມູນ​​ສຳ​ເລັ​ດ​ແລ້ວ​");
-      router.push("/activity/user/detail");
+      router.push("/activity/user?tab=history");
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("ເພີ່ມ​ຂໍ້​ມູນ​ບໍ່ສຳ​ເລັ​ດ");
@@ -163,7 +163,7 @@ const AddForm = () => {
         <div className="px-1 py-10 text-center text-2xl font-bold text-red-600">
           ທ່ານ​ໄດ້​ເພີ່ມ​ກິດ​ຈ​ະ​ກຳ ​ເຂົ້າ​ໃນ​ລະ​ບົບ​ແລ້ວ.
           <div className="pt-12 text-right">
-            <Link href="/activity/user/detail">
+            <Link href="/activity/user?tab=history">
               <button className="mr-2 inline-flex items-center gap-x-2 rounded-lg border border-blue-600 px-2 py-2 text-sm font-medium text-blue-600 hover:border-blue-500 hover:text-blue-500 focus:border-blue-500 focus:text-blue-500 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-blue-500 dark:text-blue-500 dark:hover:border-blue-400 dark:hover:text-blue-400">
                 ໄປ​ໜ້າ​ປະ​ຫວັດ​ກິດ​ຈະ​ກຳ
               </button>

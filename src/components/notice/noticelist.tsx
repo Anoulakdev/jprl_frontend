@@ -223,6 +223,7 @@ const NoticeList: React.FC = () => {
   const customStyles = {
     headCells: {
       style: {
+        backgroundColor: "#d9e0e9",
         fontWeight: "bold",
         fontSize: "16px",
         width: "200px",
@@ -241,13 +242,15 @@ const NoticeList: React.FC = () => {
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
       <div className="mb-4 flex justify-between">
-        {user?.roleId === 2 && (
+        {user?.roleId === 2 ? (
           <Link
             href="/notice/add"
             className="inline-flex items-center gap-x-2 rounded-lg border border-transparent bg-blue-600 px-2 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:bg-blue-700"
           >
             ເພີ່ມແຈ້ງ​ການ
           </Link>
+        ) : (
+          <div></div>
         )}
 
         <input

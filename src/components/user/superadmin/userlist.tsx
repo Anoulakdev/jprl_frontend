@@ -240,7 +240,7 @@ const UserList: React.FC = () => {
       cell: (row: User) =>
         row.userimg ? (
           <Image
-          className="h-16 w-16 rounded-lg border object-cover shadow-md"
+            className="h-16 w-16 rounded-lg border object-cover shadow-md"
             src={`${process.env.NEXT_PUBLIC_API_URL}/upload/user/${row.userimg}`}
             alt={row.userimg}
             width={500}
@@ -253,7 +253,7 @@ const UserList: React.FC = () => {
           />
         ) : (
           <Image
-          className="h-16 w-16 rounded-lg border object-cover shadow-md"
+            className="h-16 w-16 rounded-lg border object-cover shadow-md"
             src={`/nophoto.jpg`}
             alt="nophoto"
             width={500}
@@ -298,6 +298,7 @@ const UserList: React.FC = () => {
   const customStyles = {
     headCells: {
       style: {
+        backgroundColor: "#d9e0e9",
         fontWeight: "bold",
         fontSize: "16px",
         width: "140px",

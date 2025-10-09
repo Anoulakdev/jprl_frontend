@@ -98,7 +98,7 @@ const EditForm = () => {
       });
 
       toast.success("ອັບ​ເດດ​ສຳ​ເລັດ​ແລ​້ວ");
-      router.push("/activity/user/detail");
+      router.push("/activity/user?tab=history");
     } catch (error) {
       console.error("Error during form submission:", error);
       toast.error("ອັບ​ເດດ​ບໍ່​ສຳ​ເລັດ");

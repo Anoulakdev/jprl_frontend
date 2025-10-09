@@ -162,9 +162,9 @@ const EditForm = () => {
     try {
       setIsLoading(true);
       const formData = new FormData();
-      formData.append("firstname", user.firstname);
-      formData.append("lastname", user.lastname);
-      formData.append("gender", user.gender);
+      // formData.append("firstname", user.firstname);
+      // formData.append("lastname", user.lastname);
+      // formData.append("gender", user.gender);
       formData.append("tel", user.tel || "");
       formData.append("roleId", String(user.roleId));
       formData.append("positionId", String(user.positionId));
@@ -198,7 +198,7 @@ const EditForm = () => {
       <form onSubmit={handleSubmit}>
         <div className="p-6.5">
           <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
-            <div className="w-full md:w-1/4 lg:w-1/4">
+            {/* <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ເພດ <span className="text-red">*</span>
               </label>
@@ -228,7 +228,7 @@ const EditForm = () => {
                   <span className="text-dark dark:text-white">​ຍິງ</span>
                 </label>
               </div>
-            </div>
+            </div> */}
 
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
@@ -240,8 +240,8 @@ const EditForm = () => {
                 value={user?.firstname || ""}
                 onChange={handleChange}
                 placeholder="ຊື່"
-                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-                required
+                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-gray-100 px-5.5 py-3  text-gray-500 outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-gray-400"
+                readOnly
               />
             </div>
 
@@ -255,8 +255,8 @@ const EditForm = () => {
                 value={user?.lastname || ""}
                 onChange={handleChange}
                 placeholder="ນາມ​ສະ​ກຸນ"
-                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
-                required
+                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-gray-100 px-5.5 py-3  text-gray-500 outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-gray-400"
+                readOnly
               />
             </div>
 
@@ -274,9 +274,7 @@ const EditForm = () => {
                 className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
               />
             </div>
-          </div>
 
-          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ຕຳ​ແໜ່ງ <span className="text-red">*</span>
@@ -315,7 +313,9 @@ const EditForm = () => {
                 </span>
               </div>
             </div>
+          </div>
 
+          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ໜ່ວຍ <span className="text-red">*</span>
@@ -405,9 +405,6 @@ const EditForm = () => {
                 className="w-full cursor-pointer rounded-[7px] border-[1.5px] border-stroke px-3 py-[9px] text-black outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-stroke file:px-2.5 file:py-1 file:text-body-xs file:font-medium file:text-dark-5 focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-dark dark:border-dark-3 dark:bg-dark-2 dark:file:border-dark-3 dark:file:bg-white/30 dark:file:text-white"
               />
             </div>
-          </div>
-
-          <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
             <div className="w-full md:w-1/4 lg:w-1/4">
               {user?.userimg && (
                 <Image
@@ -420,6 +417,20 @@ const EditForm = () => {
               )}
             </div>
           </div>
+
+          {/* <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
+            <div className="w-full md:w-1/4 lg:w-1/4">
+              {user?.userimg && (
+                <Image
+                  className="mt-5"
+                  src={`${process.env.NEXT_PUBLIC_API_URL}/upload/user/${user.userimg}`}
+                  alt={user.userimg}
+                  width={100}
+                  height={100}
+                />
+              )}
+            </div>
+          </div> */}
 
           <div className="mt-6 flex justify-center">
             <button

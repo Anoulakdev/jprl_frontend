@@ -13,6 +13,7 @@ interface Unit {
 const AddForm = () => {
   const [formData, setFormData] = useState({
     unitId: "",
+    code: "",
     name: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,7 +69,7 @@ const AddForm = () => {
         <div className="p-6.5">
           <div className="mb-4.5 flex flex-col gap-4.5 xl:flex-row">
             {/* Name Field */}
-            <div className="w-full xl:w-1/2">
+            <div className="w-full xl:w-1/3">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ໜ່ວຍ <span className="text-red">*</span>
               </label>
@@ -106,7 +107,21 @@ const AddForm = () => {
                 </span>
               </div>
             </div>
-            <div className="w-full xl:w-1/2">
+            <div className="w-full xl:w-1/3">
+              <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
+                ລະ​ຫັດ​ຈຸ <span className="text-red">*</span>
+              </label>
+              <input
+                type="text"
+                name="code"
+                value={formData.code}
+                onChange={handleChange}
+                placeholder="ລະ​ຫັດ​ຈຸ"
+                className="w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5.5 py-3 text-dark outline-none transition placeholder:text-dark-6 focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+                required
+              />
+            </div>
+            <div className="w-full xl:w-1/3">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ຊື່​ຈຸ <span className="text-red">*</span>
               </label>

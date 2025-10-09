@@ -14,6 +14,7 @@ interface DetailAct {
   id: number;
   content: string;
   actimg: string;
+  approved: number;
   createdAt: string;
   activity: Activity;
 }
@@ -24,7 +25,7 @@ interface Activity {
   dateactive: string;
 }
 
-const ActList: React.FC = () => {
+const DetailActList: React.FC = () => {
   const [data, setData] = useState<DetailAct[]>([]);
   const [filteredData, setFilteredData] = useState<DetailAct[]>([]);
   const [filterText, setFilterText] = useState<string>("");
@@ -114,7 +115,7 @@ const ActList: React.FC = () => {
         const rowIndex = (currentPage - 1) * rowsPerPage + index + 1;
         return rowIndex;
       },
-      width: "8%",
+      width: "5%",
       sortable: true,
     },
     {
@@ -165,6 +166,41 @@ const ActList: React.FC = () => {
       ),
     },
     {
+      name: "ສະ​ຖານ​ະ",
+      selector: (row: DetailAct) => row.approved,
+      sortable: true,
+      cell: (row: DetailAct) => {
+        let text = "";
+        let colorClass = "";
+
+        switch (row.approved) {
+          case 1:
+            text = "ລໍ​ຖ້າ​ອະ​ນຸ​ມັດ";
+            colorClass = "text-orange-500 font-medium";
+            break;
+          case 2:
+            text = "​ອະ​ນຸ​ມັດ";
+            colorClass = "text-green-600 font-medium";
+            break;
+          case 3:
+            text = "​ປະ​ຕິ​ເສດ";
+            colorClass = "text-red-600 font-medium";
+            break;
+          default:
+            text = "-";
+            colorClass = "text-gray-500";
+        }
+
+        return (
+          <div
+            className={`overflow-hidden whitespace-normal break-words ${colorClass}`}
+          >
+            {text}
+          </div>
+        );
+      },
+    },
+    {
       name: "ຈັດ​ການ",
       cell: (row: DetailAct) => {
         const today = moment().format("YYYY-MM-DD");
@@ -197,6 +233,7 @@ const ActList: React.FC = () => {
   const customStyles = {
     headCells: {
       style: {
+        backgroundColor: "#d9e0e9",
         fontWeight: "bold",
         fontSize: "16px",
         width: "180px",
@@ -212,7 +249,7 @@ const ActList: React.FC = () => {
   };
 
   return (
-    <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
+    <div className="dark:border-dark-3 dark:bg-gray-dark dark:shadow-card">
       <div className="mb-4 flex justify-end">
         <input
           type="text"
@@ -295,4 +332,4 @@ const DeleteConfirmationModal: React.FC<{
   );
 };
 
-export default ActList;
+export default DetailActList;
