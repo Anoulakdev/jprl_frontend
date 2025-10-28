@@ -133,6 +133,10 @@ const adminMenuGroups = [
             route: "/report/selectdaterange",
           },
           {
+            label: "ສັງ​ລວມສະ​ຖິ​ຕິ​​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ​ຕາມ​ ​ວ/ດ/ປ",
+            route: "/report/selectdaterangecount",
+          },
+          {
             label: "ການ​ເຂົ້າ​ຮ່ວມ​ກິ​ດ​ຈະ​ກຳ​ຂອງ​ພ​ະ​ນັກ​ງານ",
             route: "/report/useractall",
           },
@@ -161,6 +165,14 @@ const adminMenuGroups = [
           {
             label: "ສັງ​ລວມຈຳ​ນວນ​​ເຂົ້າ​ຮ່ວມ​ປະ​ຊຸມ​ຕາມ​ ​ວ/ດ/ປ",
             route: "/report/selectmeetdaterange",
+          },
+          {
+            label: "ສັງ​ລວມສະ​ຖິ​ຕິ​​ເຂົ້າ​ຮ່ວມປະ​ຊຸມ​ຕາມ​ ​ວ/ດ/ປ",
+            route: "/report/selectmeetdaterangecount",
+          },
+          {
+            label: "ການ​ເຂົ້າ​ຮ່ວມປະ​ຊຸມ​ຂອງ​ພ​ະ​ນັກ​ງານ",
+            route: "/report/usermeetall",
           },
         ],
       },
@@ -207,26 +219,26 @@ const userBossMenuGroups = [
         label: "​ການ​ເຂົ້າ​ຮ່ວມ​ປະ​ຊຸມ",
         route: "/report/yearusermeet",
       },
-      {
-        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
-        label: "ສັງ​ລວມຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
-        route: "/report/selectactuser",
-      },
-      {
-        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
-        label: "ຮູບ​ພາບຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
-        route: "/report/selectactimg",
-      },
-      {
-        icon: <ClipboardDocumentListIcon className="h-7 w-7" />,
-        label: "ສັງ​ລວມຈຳ​ນວນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳເປັນ​ປີ",
-        route: "/report/selectyearuser",
-      },
-      {
-        icon: <ClipboardDocumentListIcon className="h-8 w-8" />,
-        label: "ສັງ​ລວມຈຳ​ນວນ​​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ​ຕາມ​ ​ວ/ດ/ປ",
-        route: "/report/selectdaterange",
-      },
+      // {
+      //   icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
+      //   label: "ສັງ​ລວມຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
+      //   route: "/report/selectactuser",
+      // },
+      // {
+      //   icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
+      //   label: "ຮູບ​ພາບຄົນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ",
+      //   route: "/report/selectactimg",
+      // },
+      // {
+      //   icon: <ClipboardDocumentListIcon className="h-7 w-7" />,
+      //   label: "ສັງ​ລວມຈຳ​ນວນ​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳເປັນ​ປີ",
+      //   route: "/report/selectyearuser",
+      // },
+      // {
+      //   icon: <ClipboardDocumentListIcon className="h-8 w-8" />,
+      //   label: "ສັງ​ລວມຈຳ​ນວນ​​ເຂົ້າ​ຮ່ວມ​ກິດ​ຈະ​ກຳ​ຕາມ​ ​ວ/ດ/ປ",
+      //   route: "/report/selectdaterange",
+      // },
     ],
   },
 ];
