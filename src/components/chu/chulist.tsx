@@ -87,8 +87,9 @@ const ChuList: React.FC = () => {
     // Filter data based on the input value
     const filtered = data.filter(
       (chu) =>
-        chu.unit.name.toLowerCase().includes(value) ||
-        chu.name.toLowerCase().includes(value),
+        chu.unit?.name?.toLowerCase().includes(value) ||
+        chu.code?.toLowerCase().includes(value) ||
+        chu.name?.toLowerCase().includes(value),
     );
     setFilteredData(filtered);
   };

@@ -18,6 +18,7 @@ interface Unit {
 interface Chu {
   id: number;
   name: string;
+  code: string;
 }
 
 const AddForm = () => {
@@ -378,7 +379,7 @@ const AddForm = () => {
                   </option>
                   {chuss.map((chu) => (
                     <option key={chu.id} value={chu.id}>
-                      {chu.name}
+                      {chu.code}-{chu.name}
                     </option>
                   ))}
                 </select>
