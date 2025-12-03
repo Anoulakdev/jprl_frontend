@@ -105,7 +105,10 @@ const ChuList: React.FC = () => {
   const columns = [
     {
       name: "ລ/ດ",
-      cell: (row: Chu, index: number) => index + 1,
+      cell: (row: Chu, index: number) => {
+        const rowIndex = (currentPage - 1) * rowsPerPage + index + 1;
+        return rowIndex;
+      },
       sortable: true,
       width: "10%",
     },
@@ -119,13 +122,13 @@ const ChuList: React.FC = () => {
       name: "ລະ​ຫັດຈຸ​ງານ",
       selector: (row: Chu) => row.code,
       sortable: true,
-      width: "20%",
+      width: "15%",
     },
     {
       name: "ຊື່​ຈຸ​ງານ",
       selector: (row: Chu) => row.name,
       sortable: true,
-      width: "25%",
+      width: "30%",
     },
     {
       name: "#",

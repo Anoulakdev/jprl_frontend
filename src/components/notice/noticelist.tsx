@@ -127,7 +127,10 @@ const NoticeList: React.FC = () => {
   const columns = [
     {
       name: "ລ/ດ",
-      cell: (row: Notice, index: number) => index + 1,
+      cell: (row: Notice, index: number) => {
+        const rowIndex = (currentPage - 1) * rowsPerPage + index + 1;
+        return rowIndex;
+      },
       sortable: true,
       width: "10%",
     },
@@ -281,7 +284,7 @@ const NoticeList: React.FC = () => {
             highlightOnHover
             pointerOnHover
             className="w-full table-auto"
-            noDataComponent="ບໍ່​ມີ​ຂໍ້​ມູນ​ຄົ້ນ​ຫາ"
+            noDataComponent="ບໍ່​ມີ​ຂໍ້​ມູນ​"
             paginationComponentOptions={{
               rowsPerPageText: "ສະ​ແດງ​ຕ​ໍ່​ໜ້າ",
               rangeSeparatorText: "ຈາກ",

@@ -263,6 +263,11 @@ const UserList: React.FC = () => {
       name: "​ຕຳ​ແໜ່ງ",
       selector: (row: User) => row.position?.name,
       sortable: true,
+      cell: (row: User) => (
+        <div className="overflow-hidden whitespace-normal break-words">
+          {row.position?.name}
+        </div>
+      ),
     },
     {
       name: "​ໜ່ວຍ",
@@ -278,6 +283,11 @@ const UserList: React.FC = () => {
       name: "​​ຈຸ",
       selector: (row: User) => row.chu?.name,
       sortable: true,
+      cell: (row: User) => (
+        <div className="overflow-hidden whitespace-normal break-words">
+          {row.chu?.name}
+        </div>
+      ),
     },
     {
       name: "ຮູບ​ພາບ",

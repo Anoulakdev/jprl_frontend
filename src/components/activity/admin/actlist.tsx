@@ -216,7 +216,7 @@ const ActList: React.FC = () => {
             highlightOnHover
             pointerOnHover
             className="w-full table-auto"
-            noDataComponent="ບໍ່​ມີ​ຂໍ້​ມູນ​ຄົ້ນ​ຫາ"
+            noDataComponent="ບໍ່​ມີ​ຂໍ້​ມູນ​"
             paginationComponentOptions={{
               rowsPerPageText: "ສະ​ແດງ​ຕ​ໍ່​ໜ້າ",
               rangeSeparatorText: "ຈາກ",
