@@ -70,75 +70,6 @@ export default function LoginPage() {
   };
 
   return (
-    // <div className="flex h-screen items-center justify-center bg-gray-100">
-    //   <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
-    //     <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
-    //       Login
-    //     </h2>
-    //     {error && (
-    //       <div className="mb-4 rounded bg-red-100 p-2 text-sm text-red-500">
-    //         {error}
-    //       </div>
-    //     )}
-    //     <form onSubmit={handleLogin} className="space-y-4">
-    //       <div>
-    //         <label
-    //           htmlFor="username"
-    //           className="block text-sm font-medium text-gray-700"
-    //         >
-    //           Username
-    //         </label>
-    //         <input
-    //           id="username"
-    //           type="text"
-    //           value={username}
-    //           onChange={(e) => setUsername(e.target.value)}
-    //           className="w-full rounded-lg border px-4 py-2 text-black focus:outline-none focus:ring focus:ring-blue-300"
-    //           placeholder="Enter your username"
-    //           required
-    //         />
-    //       </div>
-    //       <div className="relative">
-    //         <label
-    //           htmlFor="password"
-    //           className="block text-sm font-medium text-gray-700"
-    //         >
-    //           Password
-    //         </label>
-    //         <div className="relative">
-    //           <input
-    //             id="password"
-    //             type={showPassword ? "text" : "password"} // สลับระหว่าง password / text
-    //             value={password}
-    //             onChange={(e) => setPassword(e.target.value)}
-    //             className="w-full rounded-lg border px-4 py-2 text-black focus:outline-none focus:ring focus:ring-blue-300"
-    //             placeholder="Enter your password"
-    //             required
-    //           />
-    //           {/* ปุ่ม Toggle Eye Icon */}
-    //           <button
-    //             type="button"
-    //             onClick={() => setShowPassword(!showPassword)}
-    //             className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
-    //           >
-    //             {showPassword ? (
-    //               <EyeIcon className="h-5 w-5" /> // ไอคอนซ่อนรหัสผ่าน
-    //             ) : (
-    //               <EyeSlashIcon className="h-5 w-5" /> // ไอคอนแสดงรหัสผ่าน
-    //             )}
-    //           </button>
-    //         </div>
-    //       </div>
-    //       <button
-    //         type="submit"
-    //         className="w-full rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
-    //       >
-    //         Login
-    //       </button>
-    //     </form>
-    //   </div>
-    // </div>
-
     <div className="flex min-h-screen items-center justify-center bg-blue-200 px-2">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
         <div className="mb-5 flex flex-col items-center text-center">
@@ -166,7 +97,9 @@ export default function LoginPage() {
               id="username"
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={
+                (e) => setUsername(e.target.value.replace(/\s+/g, "")) // ลบช่องว่างทั้งหมด
+              }
               placeholder="ຊື່​ເຂົ້າ​ລະ​ບົບ"
               required
             />
@@ -184,7 +117,9 @@ export default function LoginPage() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={
+                  (e) => setPassword(e.target.value.replace(/\s+/g, "")) // ลบช่องว่างทั้งหมด
+                }
                 placeholder="ລະ​ຫັດ​ຜ່ານ"
                 required
               />
