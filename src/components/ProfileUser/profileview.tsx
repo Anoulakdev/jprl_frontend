@@ -188,7 +188,6 @@ const ProfileView = () => {
     return age;
   };
 
-  console.log(user);
   return (
     <>
       <div className="overflow-hidden rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">

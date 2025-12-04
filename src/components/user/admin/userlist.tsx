@@ -196,11 +196,13 @@ const UserList: React.FC = () => {
       const code = user.code?.toLowerCase() || "";
       const firstname = user.firstname?.toLowerCase() || "";
       const tel = user.tel?.toLowerCase() || "";
+      const unit = user.unit?.name?.toLowerCase() || "";
 
       return (
         code.includes(debouncedFilter) ||
         firstname.includes(debouncedFilter) ||
-        tel.includes(debouncedFilter)
+        tel.includes(debouncedFilter) ||
+        unit.includes(debouncedFilter)
       );
     });
   }, [data, debouncedFilter]);

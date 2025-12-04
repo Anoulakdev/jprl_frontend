@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
+import axiosInstance from "@/utils/axiosInstance";
 import { removeLocalStorage } from "@/utils/storage";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -10,12 +11,14 @@ import {
   EyeIcon,
   Cog6ToothIcon,
   ArrowLeftStartOnRectangleIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 import { encryptId } from "@/lib/cryptoId";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter(); // Initialize router
 
   useEffect(() => {
@@ -23,6 +26,28 @@ const DropdownUser = () => {
     const storedUser = getLocalStorage("user");
     setUser(storedUser);
   }, []);
+
+  const handleUpdateFromHRM = async (id: number, code: string) => {
+    if (!id || !code) {
+      toast.error("ຂໍ້ມູນບໍ່ຄົບ");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await axiosInstance.put(`/users/updatedatahrm/${id}`, {
+        code,
+      });
+
+      toast.success("ອັບ​ເດດ​ຂໍ້​ມູນ​ຈາກ HRM ສຳເລັດ");
+    } catch (error: any) {
+      console.error("HRM ERROR:", error.response?.data || error);
+      toast.error(error.response?.data?.message || "ຜິດພາດໃນການອັບເດດ");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Logout handler
   const handleLogout = () => {
@@ -136,6 +161,17 @@ const DropdownUser = () => {
                 ປ່ຽນ​ລະ​ຫັດ​ຜ່ານ
               </Link>
             </li>
+            {user?.unit?.no !== 18 && (
+              <li>
+                <button
+                  onClick={() => handleUpdateFromHRM(user?.id, user?.code)}
+                  className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base"
+                >
+                  <UserIcon className="h-6 w-6" />
+                  ອັບເດດຂໍ້ມູນຈາກHRM
+                </button>
+              </li>
+            )}
           </ul>
           <div className="p-2.5">
             <button
@@ -148,6 +184,36 @@ const DropdownUser = () => {
           </div>
         </div>
       )}
+
+      {loading && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4">
+            <svg
+              className="h-10 w-10 animate-spin text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+              ></path>
+            </svg>
+
+            <p className="text-lg font-medium text-white">ກຳລັງອັບເດດ...</p>
+          </div>
+        </div>
+      )}
+
       {/* <!-- Dropdown End --> */}
     </ClickOutside>
   );

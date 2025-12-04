@@ -12,6 +12,7 @@ import {
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
 import { encryptId } from "@/lib/cryptoId";
+import { getLocalStorage } from "@/utils/storage";
 
 interface User {
   id: number;
@@ -67,6 +68,7 @@ interface Chu {
 
 const UserList: React.FC = () => {
   const [data, setData] = useState<User[]>([]);
+  const [user, setUser] = useState<any>(null);
   const [filterText, setFilterText] = useState<string>("");
   const [debouncedFilter, setDebouncedFilter] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -75,6 +77,12 @@ const UserList: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    // Retrieve user data from localStorage
+    const storedUser = getLocalStorage("user");
+    setUser(storedUser);
+  }, []);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -102,7 +110,11 @@ const UserList: React.FC = () => {
 
   const handleEdit = (id: number) => {
     const encryptedId = encryptId(id);
-    router.push(`/user/user/edit/${encryptedId}`);
+    {
+      user?.unit?.no === 18
+        ? router.push(`/user/user/ngedit/${encryptedId}`)
+        : router.push(`/user/user/edit/${encryptedId}`);
+    }
   };
 
   const handleDeleteClick = (id: number) => {
@@ -373,7 +385,7 @@ const UserList: React.FC = () => {
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
       <div className="mb-4 flex justify-between">
         <Link
-          href="/user/user/add"
+          href={user?.unit?.no === 18 ? "/user/user/ngadd" : "/user/user/add"}
           className="inline-flex items-center gap-x-2 rounded-lg border border-transparent bg-blue-600 px-2 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:bg-blue-700 focus:outline-none active:bg-blue-700 disabled:pointer-events-none disabled:opacity-50"
         >
           ເພີ່ມສະ​ມາ​ຊິກ
