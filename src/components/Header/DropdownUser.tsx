@@ -161,14 +161,18 @@ const DropdownUser = () => {
                 ປ່ຽນ​ລະ​ຫັດ​ຜ່ານ
               </Link>
             </li>
-            {user?.unit?.no !== 18 && (
+            {!(
+              user?.roleId === 1 ||
+              user?.roleId === 2 ||
+              user?.unit?.no === 18
+            ) && (
               <li>
                 <button
                   onClick={() => handleUpdateFromHRM(user?.id, user?.code)}
                   className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base"
                 >
                   <UserIcon className="h-6 w-6" />
-                  ອັບເດດຂໍ້ມູນຈາກHRM
+                  ອັບເດດຂໍ້ມູນຈາກ HRM
                 </button>
               </li>
             )}
