@@ -5,6 +5,8 @@ import Image from "next/image";
 import axiosInstance from "@/utils/axiosInstance";
 import { toast } from "react-toastify";
 import DataTable, { TableColumn } from "react-data-table-component";
+import { MapPinIcon } from "@heroicons/react/24/outline";
+import { encryptId } from "@/lib/cryptoId";
 
 interface Chu {
   id: number;
@@ -129,6 +131,10 @@ const Pending: React.FC = () => {
     setRowsPerPage(perPage);
   };
 
+  const handleMap = (id: number) => {
+    window.open(`/map/mapone/${encryptId(id)}`, "_blank");
+  };
+
   // ✅ filter data with useMemo
   const filteredData = useMemo(() => {
     if (!debouncedFilter) return data;
@@ -165,7 +171,7 @@ const Pending: React.FC = () => {
           {row.activity?.name}
         </div>
       ),
-      width: "28%",
+      width: "26%",
     },
     {
       name: "ລະ​ຫັດ​ພ/ງ",
@@ -194,6 +200,11 @@ const Pending: React.FC = () => {
       name: "ຈຸ",
       selector: (row) => row.user?.chu?.name,
       sortable: true,
+      cell: (row) => (
+        <div className="overflow-hidden whitespace-normal break-words">
+          {row.user?.chu?.name}
+        </div>
+      ),
       width: "12%",
     },
     {
@@ -234,6 +245,15 @@ const Pending: React.FC = () => {
       cell: (row) => (
         <>
           <button
+            onClick={() => handleMap(row.id)}
+            className="group relative mr-2 inline-flex items-center gap-x-2 rounded-lg border border-red-500 px-2 py-2 text-xs font-medium text-red-500 hover:border-red-400 hover:text-red-400 focus:border-red-400 focus:text-red-400 focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+          >
+            <MapPinIcon className="h-4 w-4" />
+            <span className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white opacity-0 shadow-sm transition-opacity duration-200 group-hover:opacity-100 dark:bg-neutral-700">
+              ເບິ່ງ​ຈຸ​ດ​ເພີ່ມ​ຂໍ້​ມູນ
+            </span>
+          </button>
+          <button
             onClick={() => handleApproved(row.id)}
             className="mr-2 inline-flex items-center gap-x-2 rounded-lg border border-green-500 px-2 py-2 text-xs font-medium text-green-500 hover:border-green-400 hover:text-green-400"
           >
@@ -248,7 +268,7 @@ const Pending: React.FC = () => {
         </>
       ),
       sortable: false,
-      width: "11%",
+      width: "14%",
     },
   ];
 
