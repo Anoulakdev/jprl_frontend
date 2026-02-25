@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useEffect } from "react";
 import axiosInstance from "@/utils/axiosInstance";
@@ -9,8 +8,9 @@ import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { encryptId } from "@/lib/cryptoId";
+import { getLocalStorage } from "@/utils/storage";
 
-interface User {
+interface Report {
   id: number;
   code: string;
   firstname: string;
@@ -75,14 +75,26 @@ interface Chu {
   name: string;
 }
 
+interface User {
+  roleId: number;
+  unitId: number;
+}
+
 const Report: React.FC = () => {
   const [selectedUnit, setSelectedUnit] = useState<number | null>(null);
   const [selectedChu, setSelectedChu] = useState<number | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [units, setUnits] = useState<Unit[]>([]);
   const [chus, setChus] = useState<Chu[]>([]);
-  const [reportData, setReportData] = useState<User[]>([]);
+  const [reportData, setReportData] = useState<Report[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+
+  useEffect(() => {
+    // Retrieve user data from localStorage
+    const storedUser = getLocalStorage<User>("user");
+    setUser(storedUser);
+  }, []);
 
   useEffect(() => {
     const fetchUnits = async () => {
@@ -100,14 +112,26 @@ const Report: React.FC = () => {
 
   useEffect(() => {
     const fetchChus = async () => {
-      if (!selectedUnit) {
-        setChus([]);
-        return;
-      }
       try {
+        let unitIdToUse;
+
+        // ✅ ถ้า roleId === 3 ใช้ unit ของ user
+        if (user?.roleId === 3) {
+          unitIdToUse = user.unitId;
+        } else {
+          unitIdToUse = selectedUnit;
+        }
+
+        // ถ้าไม่มี unitId เลย ไม่ต้องยิง API
+        if (!unitIdToUse) {
+          setChus([]);
+          return;
+        }
+
         const response = await axiosInstance.get(
-          `/chus/schu?unitId=${selectedUnit}`,
+          `/chus/schu?unitId=${unitIdToUse}`,
         );
+
         setChus(response.data);
       } catch (error) {
         console.error("Error fetching chus:", error);
@@ -116,14 +140,18 @@ const Report: React.FC = () => {
     };
 
     fetchChus();
-    setSelectedChu(null); // reset selected chu when unit changes
-  }, [selectedUnit]);
+    setSelectedChu(null);
+  }, [selectedUnit, user]);
 
   const fetchReportData = async () => {
     try {
       setLoading(true);
+
+      // 🔥 ถ้า role 3 ใช้ unit ของตัวเอง
+      const unitId = user?.roleId === 3 ? user.unitId : selectedUnit ?? "";
+
       const response = await axiosInstance.get(
-        `/reports/userall?unitId=${selectedUnit ?? ""}&chuId=${selectedChu ?? ""}`,
+        `/reports/userall?unitId=${unitId}&chuId=${selectedChu ?? ""}`,
       );
       setReportData(response.data);
     } catch (error) {
@@ -260,23 +288,25 @@ const Report: React.FC = () => {
   return (
     <div className="rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
       <div className="mb-4 flex flex-col items-center gap-3 md:flex-row md:gap-0">
-        <div className="relative w-full md:mr-3 md:w-1/4">
-          <select
-            value={selectedUnit ?? ""}
-            onChange={handleUnitChange}
-            className="relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 text-black outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary"
-          >
-            <option value="">ເລືອກໜ່ວຍ</option>
-            {units.map((unit) => (
-              <option key={unit.id} value={unit.id}>
-                {unit.name}
-              </option>
-            ))}
-          </select>
-          <div className="pointer-events-none absolute inset-0 left-auto right-5 items-center text-black lg:flex">
-            <ArrowDownCircleIcon className="mt-3 h-6 w-6 md:mt-3 lg:mt-1" />
+        {user?.roleId !== 3 && (
+          <div className="relative w-full md:mr-3 md:w-1/4">
+            <select
+              value={selectedUnit ?? ""}
+              onChange={handleUnitChange}
+              className="relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 text-black outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary"
+            >
+              <option value="">ເລືອກໜ່ວຍ</option>
+              {units.map((unit) => (
+                <option key={unit.id} value={unit.id}>
+                  {unit.name}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-0 left-auto right-5 items-center text-black lg:flex">
+              <ArrowDownCircleIcon className="mt-3 h-6 w-6 md:mt-3 lg:mt-1" />
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="relative w-full md:w-1/4">
           <select

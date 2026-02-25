@@ -297,6 +297,11 @@ const userUnitMenuGroups = [
         label: "​ການ​ເຂົ້າ​ຮ່ວມ​ປະ​ຊຸມ",
         route: "/report/yearusermeet",
       },
+      {
+        icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
+        label: "ສັງ​ລວມ​ຈຳ​ນວນ​ສະ​ມາ​ຊິກ",
+        route: "/report/userall",
+      },
     ],
   },
 ];
