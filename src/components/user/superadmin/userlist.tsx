@@ -236,6 +236,11 @@ const UserList: React.FC = () => {
       sortable: true,
     },
     {
+      name: "ສິດຜູ້ໃຊ້",
+      selector: (row: User) => row.role?.name,
+      sortable: true,
+    },
+    {
       name: "ຮູບ​ພາບ",
       cell: (row: User) =>
         row.userimg ? (

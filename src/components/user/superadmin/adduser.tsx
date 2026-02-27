@@ -4,6 +4,12 @@ import axiosInstance from "@/utils/axiosInstance";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
+interface Role {
+  id: number;
+  name: string;
+  description: string;
+}
+
 const AddForm = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -11,12 +17,27 @@ const AddForm = () => {
     lastname: "",
     gender: "",
     tel: "",
-    roleId: 2,
+    roleId: "",
     userimg: "",
   });
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const [roles, setRoles] = useState<Role[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await axiosInstance.get(`/roles/srole`);
+        setRoles(response.data);
+      } catch (error) {
+        console.error("Error fetching roles:", error);
+        toast.error("Failed to load roles");
+      }
+    };
+
+    fetchRoles();
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -154,6 +175,46 @@ const AddForm = () => {
           </div>
 
           <div className="mb-4.5 flex flex-col gap-4.5 md:flex-row lg:flex-row">
+            <div className="w-full md:w-1/4 lg:w-1/4">
+              <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
+                ສິດຜູ້ໃຊ້ <span className="text-red">*</span>
+              </label>
+              <div className="relative">
+                <select
+                  name="roleId"
+                  value={formData.roleId || ""}
+                  onChange={handleChange}
+                  className="relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 text-black outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary"
+                  required
+                >
+                  <option value="" disabled>
+                    ເລືອກສິດຜູ້ໃຊ້
+                  </option>
+                  {roles
+                    .filter((role) => role.id !== 3)
+                    .map((role) => (
+                      <option key={role.id} value={role.id}>
+                        {role.name}
+                      </option>
+                    ))}
+                </select>
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transform text-xl text-black">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-arrow-down-circle"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </div>
             <div className="w-full md:w-1/4 lg:w-1/4">
               <label className="text-body-md mb-3 block font-medium text-dark dark:text-white">
                 ເບີ​ໂທ(20xxxxxxxx) <span className="text-red"></span>
