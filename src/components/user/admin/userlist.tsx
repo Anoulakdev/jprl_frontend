@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, ChangeEvent, useMemo } from "react";
+import React, { useState, useEffect, ChangeEvent, useMemo, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import axiosInstance from "@/utils/axiosInstance";
@@ -72,6 +72,7 @@ const UserList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [totalRows, setTotalRows] = useState<number>(0);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const router = useRouter();
@@ -79,25 +80,33 @@ const UserList: React.FC = () => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedFilter(filterText.toLowerCase());
+      setCurrentPage(1); // Reset to page 1 on search filter change
     }, 300);
     return () => clearTimeout(handler);
   }, [filterText]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axiosInstance.get(`/users/admin`);
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(`/users/admin`, {
+        params: {
+          page: currentPage,
+          limit: rowsPerPage,
+          search: debouncedFilter,
+        },
+      });
+      setData(response.data.users);
+      setTotalRows(response.data.total);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentPage, rowsPerPage, debouncedFilter]);
 
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const handleEdit = (id: number) => {
     const encryptedId = encryptId(id);
@@ -116,9 +125,8 @@ const UserList: React.FC = () => {
     if (userToDelete) {
       try {
         await axiosInstance.delete(`/users/${userToDelete.id}`);
-        const deletedData = data.filter((u) => u.id !== userToDelete.id);
-        setData(deletedData);
         toast.success("ລົ​ບ​ຂໍ້ມູນ​ສຳ​ເລັດ​ແລ້ວ");
+        await fetchData();
       } catch (error) {
         toast.error("ລົ​ບ​ຂໍ້ມູນ​ບໍ່ສຳ​ເລັດ");
       } finally {
@@ -132,16 +140,8 @@ const UserList: React.FC = () => {
     const confirm = window.confirm("ທ່ານ​ຕ້ອງ​ການ​ທີ່​ຈະ​ລີ​ເສັດ​ບໍ?");
     if (confirm) {
       try {
-        // ส่งคำขอรีเซ็ตรหัสผ่าน
         await axiosInstance.put(`/users/resetpassword/${id}`);
-
-        // อัปเดตสถานะเพื่อแสดงว่าผู้ใช้รายนี้ถูกรีเซ็ตรหัสผ่านแล้ว
-        const updatedData = data.map((user) =>
-          user.id === id ? { ...user, passwordReset: true } : user,
-        );
-
-        setData(updatedData);
-
+        await fetchData();
         toast.success("ຣີເສັດລະ​ຫັດ​ສຳ​ເລັດ​ແລ້ວ");
       } catch (error) {
         console.error("Reset password failed:", error);
@@ -158,27 +158,23 @@ const UserList: React.FC = () => {
     setCurrentPage(page);
   };
 
-  const handleRowsPerPageChange = (perPage: number) => {
-    setRowsPerPage(perPage);
+  const handleRowsPerPageChange = (newPerPage: number, page: number) => {
+    setRowsPerPage(newPerPage);
+    setCurrentPage(page);
   };
 
   const handleStatusChange = async (id: number, currentStatus: string) => {
     try {
       setLoading(true);
-      // กำหนดสถานะใหม่ (ถ้าปัจจุบันคือ "A" จะเปลี่ยนเป็น "C")
       const newStatus = currentStatus === "A" ? "C" : "A";
 
-      // ส่งคำขอไปยัง API เพื่ออัปเดตสถานะ
       const response = await axiosInstance.put(`/users/${id}/status`, {
         actived: newStatus,
       });
 
       if (response.status === 200) {
-        toast.success("ອັບ​ເດດສະ​ຖາ​ນະ​ສຳ​ເລັດ​");
-
-        // Re-fetch the user data to reflect the updated status
-        const updatedData = await axiosInstance.get(`/users/admin`);
-        setData(updatedData.data); // Update the data in the state
+        toast.success("ອັບ​ເດດສະ​ຖา​ນະ​ສຳ​ເລັດ​");
+        await fetchData();
       }
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการอัปเดตสถานะ:", error);
@@ -187,25 +183,6 @@ const UserList: React.FC = () => {
       setLoading(false);
     }
   };
-
-  // ✅ filter data with useMemo
-  const filteredData = useMemo(() => {
-    if (!debouncedFilter) return data;
-
-    return data.filter((user) => {
-      const code = user.code?.toLowerCase() || "";
-      const firstname = user.firstname?.toLowerCase() || "";
-      const tel = user.tel?.toLowerCase() || "";
-      const unit = user.unit?.name?.toLowerCase() || "";
-
-      return (
-        code.includes(debouncedFilter) ||
-        firstname.includes(debouncedFilter) ||
-        tel.includes(debouncedFilter) ||
-        unit.includes(debouncedFilter)
-      );
-    });
-  }, [data, debouncedFilter]);
 
   const columns = [
     {
@@ -325,8 +302,6 @@ const UserList: React.FC = () => {
             width={500}
             height={500}
             style={{
-              // width: "60px",
-              // height: "70px",
               borderRadius: "5px",
             }}
           />
@@ -338,8 +313,6 @@ const UserList: React.FC = () => {
             width={500}
             height={500}
             style={{
-              // width: "60px",
-              // height: "70px",
               borderRadius: "5px",
             }}
           />
@@ -420,9 +393,11 @@ const UserList: React.FC = () => {
         <div className="max-w-full overflow-x-auto">
           <DataTable
             columns={columns}
-            data={filteredData}
+            data={data}
             customStyles={customStyles}
             pagination
+            paginationServer
+            paginationTotalRows={totalRows}
             paginationPerPage={rowsPerPage}
             paginationRowsPerPageOptions={[10, 20, 30, 50, 100]}
             paginationDefaultPage={currentPage}
@@ -436,7 +411,7 @@ const UserList: React.FC = () => {
               rowsPerPageText: "ສະ​ແດງ​ຕ​ໍ່​ໜ້າ",
               rangeSeparatorText: "ຈາກ",
               selectAllRowsItem: true,
-              selectAllRowsItemText: "ທັງໝົດ",
+              selectAllRowsItemText: "ທังໝົດ",
             }}
           />
         </div>
